@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import pool from "./config/db.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import questionRoutes from "./modules/questions/questions.routes.js";
+import lettersRoutes from "./modules/letters/letters.routes.js";
+import adminsRoutes from "./modules/admins/admins.routes.js";
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.get("/", async (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/questions", questionRoutes);
+app.use("/api/letters", lettersRoutes);
+app.use("/api/admins", adminsRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT: ${PORT}`);
