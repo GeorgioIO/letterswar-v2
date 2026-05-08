@@ -1,15 +1,60 @@
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { Plus, ShieldCheck } from "lucide-react";
+import StatCards from "../../components/UI/Dashboard/StatCards";
 
 export default function HomePage() {
-  const AuthContext = useAuth();
+  const { admin } = useAuth();
 
   return (
-    <section className="h-full  grid grid-rows-[100px_1fr]">
-      <div className="bg-orange-500 p-3.5 rounded-xl">
-        <h1 className="text-white text-xl font-bold">
-          Hello {AuthContext.admin.username} 👋
+    <section className="h-full  grid grid-rows-[100px_150px_1fr] gap-5">
+      <div className="relative bg-orange-500 p-5 pb-0 rounded-xl overflow-hidden h-[90px]">
+        <h1 className="relative z-10 text-white text-xl font-bold">
+          Hello {admin.username} 👋
         </h1>
+
+        <svg
+          className="absolute bottom-0 left-0 w-full"
+          viewBox="0 0 400 50"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 30 C60 10,120 50,200 30 C280 10,340 50,400 30 L400 50 L0 50 Z"
+            fill="rgba(255,255,255,0.10)"
+          />
+          <path
+            d="M0 38 C50 20,130 55,200 38 C270 20,350 55,400 38 L400 50 L0 50 Z"
+            fill="rgba(255,255,255,0.12)"
+          />
+          <path
+            d="M0 44 C80 32,160 54,240 44 C310 34,370 52,400 44 L400 50 L0 50 Z"
+            fill="rgba(255,255,255,0.15)"
+          />
+        </svg>
       </div>
+
+      <StatCards />
+
+      <nav className="flex justify-center items-center gap-8">
+        <NavLink
+          to="/dashboard/questions"
+          className="inline-flex items-center gap-2 px-5 h-[42px] bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-xl transition-colors"
+        >
+          <Plus size={16} />
+          Add Question
+        </NavLink>
+
+        {admin.role === "superadmin" && (
+          <NavLink
+            to="/dashboard/admins"
+            className="inline-flex items-center gap-2 px-5 h-[42px] border-[1.5px] border-orange-500 text-orange-500 hover:bg-orange-50 text-sm font-medium rounded-xl transition-colors"
+          >
+            <ShieldCheck size={16} />
+            Manage Admins
+          </NavLink>
+        )}
+      </nav>
     </section>
   );
 }

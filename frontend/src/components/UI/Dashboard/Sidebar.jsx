@@ -19,7 +19,7 @@ export default function Sidebar() {
         <LogoTitle classes="px-4" />
         <div className="w-full h-0.5 bg-orange-500"></div>
         <nav className="flex flex-col gap-3">
-          <CustomLink toPath="/dashboard/" Icon={House} innerText="Home" end />
+          <CustomLink toPath="/dashboard" Icon={House} innerText="Home" end />
           <CustomLink
             toPath="/dashboard/questions"
             Icon={Puzzle}

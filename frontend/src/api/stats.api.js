@@ -1,8 +1,6 @@
 import api from "./axios";
 
-
-export function getAllStatsRequest()
-{
-    const response = await api.get("/api")
-    return response.data
+export async function getAllStatsRequest() {
+  const response = await api.get("/stats");
+  return response.data;
 }

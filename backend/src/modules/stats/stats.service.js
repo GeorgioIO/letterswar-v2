@@ -40,10 +40,13 @@ export async function getStats() {
         AND is_deleted = FALSE;
     `);
 
+  const monthLabel = new Date().toLocaleString("default", { month: "long" });
+
   return {
     totalQuestions,
     lettersWithQuestionsU10,
     totalAdmins,
     questionsAddedThisMonth,
+    monthLabel,
   };
 }
