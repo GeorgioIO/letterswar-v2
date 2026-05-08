@@ -3,10 +3,12 @@ import { useState, useActionState } from "react";
 import LoginInput from "./LoginInput";
 import { isValidEmail, isNotEmpty } from "../../util/validation";
 import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [showPass, setShowPass] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   async function loginAction(prevState, formData) {
     const email = formData.get("email");
@@ -28,8 +30,8 @@ export default function LoginForm() {
 
     try {
       await login({ email, password });
-      console.log("Success");
-      return { errors: null };
+
+      navigate("/dashboard");
     } catch (error) {
       console.log("errors");
       return {

@@ -1,5 +1,5 @@
 import { useAuth } from "../../hooks/useAuth";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { GridLoader } from "react-spinners";
 
 export default function ProtectedRoute({ children }) {
@@ -18,5 +18,5 @@ export default function ProtectedRoute({ children }) {
     return <Navigate to="/login" />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 }
