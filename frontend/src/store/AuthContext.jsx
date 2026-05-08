@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 export const AuthContext = createContext({
   isLoggedIn: false,
+  isLoading: true,
   login: (data) => {},
   logout: () => {},
 });
@@ -12,7 +13,7 @@ export const AuthContext = createContext({
 function AuthContextProvider({ children }) {
   const [admin, setAdmin] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedJWTToken = localStorage.getItem("jwttoken");
@@ -23,7 +24,7 @@ function AuthContextProvider({ children }) {
       setToken(storedJWTToken);
     }
 
-    setLoading(false);
+    setIsLoading(false);
   }, []);
 
   async function login(loginData) {
@@ -48,6 +49,7 @@ function AuthContextProvider({ children }) {
 
   const ctxValue = {
     isLoggedIn: admin !== null,
+    isLoading,
     admin,
     token,
     login,
