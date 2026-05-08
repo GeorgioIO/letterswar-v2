@@ -2,9 +2,16 @@ import { House, Puzzle, CaseUpper, UserStar, LogOut } from "lucide-react";
 import LogoTitle from "../LogoTitle";
 import CustomLink from "./CustomLink";
 import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
   const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogOut() {
+    logout();
+    navigate("/login");
+  }
 
   return (
     <section className="bg-slate-100 h-full py-4 flex flex-col ">
@@ -33,7 +40,7 @@ export default function Sidebar() {
       <div className="mt-auto px-4">
         <button
           className="cursor-pointer text-orange-500 font-bold flex items-center gap-2"
-          onClick={logout}
+          onClick={handleLogOut}
         >
           <LogOut />
           Log out

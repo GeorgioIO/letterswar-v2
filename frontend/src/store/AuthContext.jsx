@@ -6,6 +6,7 @@ import { useEffect } from "react";
 export const AuthContext = createContext({
   isLoggedIn: false,
   isLoading: true,
+  admin: {},
   login: (data) => {},
   logout: () => {},
 });
@@ -20,7 +21,7 @@ function AuthContextProvider({ children }) {
     const storedAdmin = localStorage.getItem("admin");
 
     if (storedJWTToken && storedAdmin) {
-      setAdmin(JSON.stringify(storedAdmin));
+      setAdmin(JSON.parse(storedAdmin));
       setToken(storedJWTToken);
     }
 
