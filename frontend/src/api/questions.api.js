@@ -1,8 +1,16 @@
 import api from "./axios";
 
 // TODO Get questions
-export async function getAllQuestionRequest() {
-  const response = await api.get("/questions");
+export async function getAllQuestionRequest(
+  page = 1,
+  limit = 10,
+  letter = null,
+) {
+  const params = { page, limit };
+
+  if (letter) params.letter = letter;
+
+  const response = await api.get(`/questions,`, { params });
   return response.data;
 }
 

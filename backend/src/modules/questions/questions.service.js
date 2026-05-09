@@ -2,8 +2,19 @@ import pool from "../../config/db.js";
 
 // in this file we place the functions that talk to the database
 
-export async function getAllQuestions() {
-  const [rows] = await pool.query(`
+export async function getAllQuestions(page, limit, letter) {
+  const offset = (page - 1) * limit;
+
+  let whereClause = "WHERE q.is_deleted = FALSE";
+  const params = [];
+
+  if (letter) {
+    whereClause += " AND l.letter = ?";
+    params.push(letter);
+  }
+
+  const [rows] = await pool.query(
+    `
     SELECT
 	    q.id,
         q.question_text,
@@ -13,11 +24,30 @@ export async function getAllQuestions() {
         a.username AS created_by
     FROM questions q
     JOIN letters l ON q.letter_id = l.id
-    LEFT JOIN admins a ON q.created_by = a.id 
-    WHERE q.is_deleted = FALSE;
-    `);
+    LEFT JOIN admins a ON q.created_by = a.id
+    ${whereClause}
+    LIMIT ? OFFSET ? 
+    `,
+    [...params, limit, offset],
+  );
 
-  return rows;
+  const [[{ total }]] = await pool.query(
+    `
+    SELECT COUNT(*) AS total
+    FROM questions q
+    JOIN letters l ON q.letter_id = l.id
+    ${whereClause}
+    `,
+    params,
+  );
+
+  return {
+    questions: rows,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
 }
 
 export async function getQuestionById(id) {

@@ -5,8 +5,16 @@ import {
 } from "../../utils/validation.js";
 
 export async function getAll(req, res) {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const letter = req.query.letter || null;
+
   try {
-    const questions = await questionServices.getAllQuestions();
+    const questions = await questionServices.getAllQuestions(
+      page,
+      limit,
+      letter,
+    );
     res.json(questions);
   } catch (error) {
     res
