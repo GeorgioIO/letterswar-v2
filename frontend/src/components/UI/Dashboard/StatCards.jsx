@@ -33,8 +33,11 @@ export default function StatCards() {
   const cards = [
     { title: "Total Questions", value: stats.totalQuestions },
     { title: "Letters Below 10 QS", value: stats.lettersWithQuestionsU10 },
+    {
+      title: `Question Added in ${stats.monthLabel}`,
+      value: stats.questionsAddedThisMonth,
+    },
     { title: "Total Admins", value: stats.totalAdmins },
-    { title: stats.monthLabel, value: stats.questionsAddedThisMonth },
   ];
 
   console.log(cards);
