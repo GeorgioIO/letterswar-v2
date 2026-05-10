@@ -1,7 +1,8 @@
 import { useState } from "react";
-import Modal from "../Modal";
+import Modal from "./Modal";
 import { X, SlidersHorizontal } from "lucide-react";
-import AlphabetGrid from "./AlphabetGrid";
+import AlphabetGrid from "../Dashboard/AlphabetGrid";
+import ModalHeader from "./ModalHeader";
 
 export default function FilterLetterModal({
   isOpen,
@@ -22,17 +23,11 @@ export default function FilterLetterModal({
   return (
     <Modal open={isOpen} onClose={handleClose}>
       {/* Modal Header */}
-      <header className="flex items-center justify-between mb-1">
-        <h3 className="text-base font-medium text-gray-900 flex items-center gap-2">
-          <SlidersHorizontal size={16} /> Filter by letter
-        </h3>
-        <button
-          onClick={handleClose}
-          className="cursor-pointer p-1 rounded-lg hover:bg-gray-100 text-gray-400"
-        >
-          <X size={16} />
-        </button>
-      </header>
+      <ModalHeader
+        title="Filter By Letter"
+        Icon={SlidersHorizontal}
+        handleClose={handleClose}
+      />
 
       {/* Letters Grid */}
       <AlphabetGrid
@@ -43,7 +38,7 @@ export default function FilterLetterModal({
       <hr className="border-gray-100 mb-4" />
 
       {/* Selected Letter */}
-      <div className="flex items-center gap-2 mb-5 min-h-[28px]">
+      <div className="flex items-center gap-2 mb-5 min-7">
         <span className="text-sm text-gray-400">Selected:</span>
         {letterSelected ? (
           <span className="inline-flex items-center gap-1.5 bg-orange-50 border border-orange-300 text-orange-600 text-xs font-medium px-3 py-1 rounded-full">

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import StatCard from "./StatCard";
-import { getAllStatsRequest } from "../../../api/stats.api.js";
+import { getAllStatsRequest } from "../../../../api/stats.api.js";
 
 export default function StatCards() {
   const [stats, setStats] = useState(null);

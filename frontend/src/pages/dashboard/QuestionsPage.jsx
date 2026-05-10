@@ -3,13 +3,15 @@ import PageHeader from "../../components/UI/Dashboard/PageHeader";
 import { getAllQuestionsRequest } from "../../api/questions.api";
 import { useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
-import FilterLetterModal from "../../components/UI/Dashboard/FilterLetterModal";
+import FilterLetterModal from "../../components/UI/Modals/FilterLetterModal";
+import AddQuestionModal from "../../components/UI/Modals/AddQuestionModal";
 
 export default function QuestionPage() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
   const [isFiltering, setIsFiltering] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const [letterSelected, setLetterSelected] = useState(null);
 
   const {
@@ -28,6 +30,14 @@ export default function QuestionPage() {
 
   function handleOpenFiltering() {
     setIsFiltering(true);
+  }
+
+  function handleOpenAddQuestion() {
+    setIsAdding(true);
+  }
+
+  function handelCloseAddQuestion() {
+    setIsAdding(false);
   }
 
   useEffect(() => {
@@ -53,6 +63,10 @@ export default function QuestionPage() {
 
   return (
     <section className="flex flex-col gap-5">
+      <AddQuestionModal
+        isOpen={isAdding}
+        handleClose={handelCloseAddQuestion}
+      />
       <FilterLetterModal
         isOpen={isFiltering}
         handleClose={handleCloseFiltering}
@@ -65,6 +79,7 @@ export default function QuestionPage() {
         addText="Add New Question"
         limit={limit}
         openFiltering={handleOpenFiltering}
+        openAdd={handleOpenAddQuestion}
         onLimitChange={(val) => handleLimitChange(val)}
       />
       <CustomTable

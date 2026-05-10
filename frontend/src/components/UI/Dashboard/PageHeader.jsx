@@ -1,6 +1,6 @@
 import { Funnel, Plus } from "lucide-react";
-import OutlineButton from "./OutlineButton";
-import Button from "./Button";
+import OutlineButton from "./Buttons/OutlineButton";
+import Button from "./Buttons/Button";
 
 export default function PageHeader({
   sectionTitle,
@@ -8,6 +8,7 @@ export default function PageHeader({
   limit,
   openFiltering,
   onLimitChange,
+  openAdd,
 }) {
   return (
     <header className="w-full bg-white border-b border-gray-100 px-6 h-15 flex items-center justify-between">
@@ -33,7 +34,7 @@ export default function PageHeader({
         <OutlineButton onClick={openFiltering}>
           <Funnel size={15} /> Filter
         </OutlineButton>
-        <Button>
+        <Button onClick={openAdd}>
           <Plus size={15} /> {addText}
         </Button>
       </div>

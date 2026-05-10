@@ -5,10 +5,11 @@ import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import HomePage from "./pages/dashboard/HomePage.jsx";
 import QuestionPage from "./pages/dashboard/QuestionsPage.jsx";
 import LettersPage from "./pages/dashboard/LettersPage.jsx";
-
+import Toast from "./components/UI/Toast.jsx";
 function App() {
   return (
     <>
+      <Toast />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
 

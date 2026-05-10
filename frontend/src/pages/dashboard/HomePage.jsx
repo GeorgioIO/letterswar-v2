@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { Plus, ShieldCheck } from "lucide-react";
-import StatCards from "../../components/UI/Dashboard/StatCards";
+import StatCards from "../../components/UI/Dashboard/StatsCards/StatCards";
 
 export default function HomePage() {
   const { admin } = useAuth();
