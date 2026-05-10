@@ -1,7 +1,7 @@
 import api from "./axios";
 
 // TODO Get questions
-export async function getAllQuestionRequest(
+export async function getAllQuestionsRequest(
   page = 1,
   limit = 10,
   letter = null,
@@ -10,7 +10,7 @@ export async function getAllQuestionRequest(
 
   if (letter) params.letter = letter;
 
-  const response = await api.get(`/questions,`, { params });
+  const response = await api.get(`/questions`, { params });
   return response.data;
 }
 

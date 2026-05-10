@@ -8,7 +8,7 @@ export default function HomePage() {
 
   return (
     <section className="h-full  grid grid-rows-[100px_150px_1fr] gap-5">
-      <div className="relative bg-orange-500 p-5 pb-0 rounded-xl overflow-hidden h-[90px]">
+      <div className="relative bg-orange-500 p-5 pb-0 rounded-xl overflow-hidden h-22.5">
         <h1 className="relative z-10 text-white text-xl font-bold">
           Hello {admin.username} 👋
         </h1>
@@ -39,7 +39,7 @@ export default function HomePage() {
       <nav className="flex justify-center items-center gap-8">
         <NavLink
           to="/dashboard/questions"
-          className="inline-flex items-center gap-2 px-5 h-[42px] bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-xl transition-colors"
+          className="inline-flex items-center gap-2 px-5 h-10.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-xl transition-colors"
         >
           <Plus size={16} />
           Add Question
@@ -48,7 +48,7 @@ export default function HomePage() {
         {admin.role === "superadmin" && (
           <NavLink
             to="/dashboard/admins"
-            className="inline-flex items-center gap-2 px-5 h-[42px] border-[1.5px] border-orange-500 text-orange-500 hover:bg-orange-50 text-sm font-medium rounded-xl transition-colors"
+            className="inline-flex items-center gap-2 px-5 h-10.5 border-[1.5px] border-orange-500 text-orange-500 hover:bg-orange-50 text-sm font-medium rounded-xl transition-colors"
           >
             <ShieldCheck size={16} />
             Manage Admins
