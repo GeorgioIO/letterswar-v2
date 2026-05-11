@@ -9,17 +9,13 @@ import { useRefresh } from "../../hooks/useRefresh";
 import DeleteModal from "../../components/UI/Modals/DeleteModal";
 import { deleteQuestionRequest } from "../../api/questions.api";
 import EditQuestionModal from "../../components/UI/Modals/EditQuestionModal";
+import { useModal } from "../../hooks/useModal";
 
 export default function QuestionPage() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
-  const [isFiltering, setIsFiltering] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
   const [letterSelected, setLetterSelected] = useState(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   const { refreshKey, handleRefresh } = useRefresh();
   const {
@@ -32,41 +28,11 @@ export default function QuestionPage() {
     resetPage,
   } = usePagination();
 
-  function handleCloseFiltering() {
-    setIsFiltering(false);
-  }
-
-  function handleOpenFiltering() {
-    setIsFiltering(true);
-  }
-
-  function handleOpenAddQuestion() {
-    setIsAdding(true);
-  }
-
-  function handelCloseAddQuestion() {
-    setIsAdding(false);
-  }
-
-  function handleOpenDelete(question) {
-    setIsDeleting(true);
-    setSelectedQuestion(question);
-  }
-
-  function handleCloseDelete() {
-    setIsDeleting(false);
-    setSelectedQuestion(null);
-  }
-
-  function handleOpenEdit(question) {
-    setIsEditing(true);
-    setSelectedQuestion(question);
-  }
-
-  function handleCloseEdit() {
-    setIsEditing(false);
-    setSelectedQuestion(null);
-  }
+  // Modals
+  const filterModal = useModal();
+  const deleteModal = useModal();
+  const addModal = useModal();
+  const editModal = useModal();
 
   useEffect(() => {
     async function getQuestions() {
@@ -91,50 +57,12 @@ export default function QuestionPage() {
 
   return (
     <section className="flex flex-col gap-5">
-      <EditQuestionModal
-        question={selectedQuestion}
-        isOpen={isEditing}
-        handleClose={handleCloseEdit}
-        handleRefresh={handleRefresh}
-        successMessage="Question updated successfully"
-        failMessage="Question failed to update"
-      />
-      <DeleteModal
-        isOpen={isDeleting}
-        handleClose={handleCloseDelete}
-        title="Delete Question"
-        successMessage="Question deleted successfully"
-        failMessage="Problem deleting question"
-        message="You're going to delete this question. Are you sure?"
-        deleteRequest={() => deleteQuestionRequest(selectedQuestion.id)}
-        onSuccess={() => {
-          handleRefresh();
-
-          if (data.length === 1 && page > 1) {
-            setPage((prev) => prev - 1);
-          }
-        }}
-      />
-      <AddQuestionModal
-        isOpen={isAdding}
-        handleClose={handelCloseAddQuestion}
-        handleRefresh={handleRefresh}
-        successMessage="Question added successfully"
-        failMessage="Fail to add question"
-      />
-      <FilterLetterModal
-        isOpen={isFiltering}
-        handleClose={handleCloseFiltering}
-        letterSelected={letterSelected}
-        handleLetterChange={setLetterSelected}
-        resetPage={resetPage}
-      />
       <PageHeader
         sectionTitle="Questions"
         addText="Add New Question"
         limit={limit}
-        openFiltering={handleOpenFiltering}
-        openAdd={handleOpenAddQuestion}
+        openFiltering={filterModal.open}
+        openAdd={addModal.open}
         onLimitChange={(val) => handleLimitChange(val)}
       />
       <CustomTable
@@ -145,8 +73,46 @@ export default function QuestionPage() {
         page={page}
         totalPages={totalPages}
         onPageChange={setPage}
-        handleOpenDelete={handleOpenDelete}
-        handleOpenEdit={handleOpenEdit}
+        handleOpenDelete={(row) => deleteModal.open(row)}
+        handleOpenEdit={(row) => editModal.open(row)}
+      />
+      <AddQuestionModal
+        isOpen={addModal.isOpen}
+        handleClose={addModal.close}
+        handleRefresh={handleRefresh}
+        successMessage="Question added successfully"
+        failMessage="Fail to add question"
+      />
+      <EditQuestionModal
+        question={editModal.data}
+        isOpen={editModal.isOpen}
+        handleClose={editModal.close}
+        handleRefresh={handleRefresh}
+        successMessage="Question updated successfully"
+        failMessage="Question failed to update"
+      />
+      <DeleteModal
+        isOpen={deleteModal.isOpen}
+        handleClose={deleteModal.close}
+        title="Delete Question"
+        successMessage="Question deleted successfully"
+        failMessage="Problem deleting question"
+        message="You're going to delete this question. Are you sure?"
+        deleteRequest={() => deleteQuestionRequest(deleteModal.data?.id)}
+        onSuccess={() => {
+          handleRefresh();
+
+          if (data.length === 1 && page > 1) {
+            setPage((prev) => prev - 1);
+          }
+        }}
+      />
+      <FilterLetterModal
+        isOpen={filterModal.isOpen}
+        handleClose={filterModal.close}
+        letterSelected={letterSelected}
+        handleLetterChange={setLetterSelected}
+        resetPage={resetPage}
       />
     </section>
   );
