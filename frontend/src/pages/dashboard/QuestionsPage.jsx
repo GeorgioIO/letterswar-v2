@@ -13,8 +13,13 @@ import { useRefresh } from "../../hooks/useRefresh";
 import { useModal } from "../../hooks/useModal";
 
 // Requests functions
-import { getAllQuestionsRequest } from "../../api/questions.api";
-import { deleteQuestionRequest } from "../../api/questions.api";
+import {
+  getAllQuestionsRequest,
+  deleteQuestionRequest,
+  restoreQuestionRequest,
+} from "../../api/questions.api";
+import {} from "../../api/questions.api";
+import RestoreModal from "../../components/UI/Modals/RestoreModal";
 
 const tableColumns = ["Letter", "Question", "Answer", "Created By", "Action"];
 
@@ -65,6 +70,7 @@ export default function QuestionPage() {
   const deleteModal = useModal();
   const addModal = useModal();
   const editModal = useModal();
+  const restoreModal = useModal();
 
   // Functions
   function renderQuestionRow(row) {
@@ -102,12 +108,14 @@ export default function QuestionPage() {
         isFetching={isFetching}
         error={error}
         columns={tableColumns}
+        showDeleted={showDeleted}
         page={page}
         totalPages={totalPages}
         onPageChange={setPage}
         noDataTitle="No Questions Available"
         noDataMessage="Questions will appear here."
         handleOpenDelete={(row) => deleteModal.open(row)}
+        handleOpenRestore={(row) => restoreModal.open(row)}
         handleOpenEdit={(row) => editModal.open(row)}
         renderRow={renderQuestionRow}
       />
@@ -125,6 +133,22 @@ export default function QuestionPage() {
         handleRefresh={handleRefresh}
         successMessage="Question updated successfully"
         failMessage="Question failed to update"
+      />
+      <RestoreModal
+        isOpen={restoreModal.isOpen}
+        handleClose={restoreModal.close}
+        title="Restore Question"
+        successMessage="Question restored successfully"
+        failMessage="Problem restoring question"
+        message="You're going to restore this question. Are you sure?"
+        restoreRequest={() => restoreQuestionRequest(restoreModal.data?.id)}
+        onSuccess={() => {
+          handleRefresh();
+
+          if (data.length === 1 && page > 1) {
+            setPage((prev) => prev - 1);
+          }
+        }}
       />
       <DeleteModal
         isOpen={deleteModal.isOpen}

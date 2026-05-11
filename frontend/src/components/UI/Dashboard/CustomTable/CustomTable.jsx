@@ -10,11 +10,13 @@ export default function CustomTable({
   error,
   columns,
   page,
+  showDeleted,
   totalPages,
   noDataTitle,
   noDataMessage,
   onPageChange,
   handleOpenDelete,
+  handleOpenRestore,
   handleOpenEdit,
   renderRow,
 }) {
@@ -57,8 +59,10 @@ export default function CustomTable({
         <TableContent
           data={data}
           handleOpenDelete={handleOpenDelete}
+          handleOpenRestore={handleOpenRestore}
           handleOpenEdit={handleOpenEdit}
           renderRow={renderRow}
+          showDeleted={showDeleted}
         />
       </div>
       {/* Footer */}

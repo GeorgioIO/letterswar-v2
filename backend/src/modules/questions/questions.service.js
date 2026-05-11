@@ -121,3 +121,16 @@ export async function deleteQuestion(id) {
 
   return result.affectedRows;
 }
+
+export async function restoreQuestion(id) {
+  const [result] = await pool.query(
+    `
+        UPDATE questions
+        SET is_deleted = FALSE
+        WHERE id = ?
+        `,
+    [id],
+  );
+
+  return result.affectedRows;
+}

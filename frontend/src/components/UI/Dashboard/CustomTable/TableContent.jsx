@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, DatabaseBackup } from "lucide-react";
 
 export default function TableContent({
   data,
   renderRow,
   handleOpenDelete,
+  handleOpenRestore,
   handleOpenEdit,
+  showDeleted,
 }) {
   const [openMenu, setOpenMenu] = useState(null);
 
@@ -40,11 +42,24 @@ export default function TableContent({
                   </>
                 )}
                 <button
-                  onClick={() => handleOpenDelete(row)}
-                  className="cursor-pointer w-full flex items-center gap-2.5 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                  onClick={
+                    showDeleted
+                      ? () => handleOpenRestore(row)
+                      : () => handleOpenDelete(row)
+                  }
+                  className={`cursor-pointer w-full flex items-center gap-2.5 px-4 py-2 text-sm ${showDeleted ? "text-green-500" : "text-red-500"} hover:bg-red-50 transition-colors`}
                 >
-                  <Trash2 size={14} />
-                  Delete
+                  {showDeleted ? (
+                    <>
+                      <DatabaseBackup size={14} />
+                      Restore
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 size={14} />
+                      Delete
+                    </>
+                  )}
                 </button>
               </div>
             )}

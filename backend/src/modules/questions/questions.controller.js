@@ -137,3 +137,21 @@ export async function remove(req, res) {
       .json({ message: error.message || "Problem in deleting question..." });
   }
 }
+
+export async function restore(req, res) {
+  const id = req.params.id;
+
+  try {
+    const affected = await questionServices.restoreQuestion(id);
+
+    if (affected === 0) {
+      return res.status(404).json({ message: "Question Not found" });
+    }
+
+    res.json({ message: "Question restored" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: error.message || "Problem in restoring question..." });
+  }
+}

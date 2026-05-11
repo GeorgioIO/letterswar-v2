@@ -11,5 +11,6 @@ router.get("/:id", questionsControllers.getOne);
 router.post("/", questionsControllers.create);
 router.put("/:id", questionsControllers.update);
 router.delete("/:id", questionsControllers.remove);
+router.patch("/:id", questionsControllers.restore);
 
 export default router;
