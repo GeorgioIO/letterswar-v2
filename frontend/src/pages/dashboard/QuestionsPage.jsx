@@ -1,15 +1,22 @@
+// Components
 import CustomTable from "../../components/UI/Dashboard/CustomTable/CustomTable";
+import EditQuestionModal from "../../components/UI/Modals/EditQuestionModal";
 import PageHeader from "../../components/UI/Dashboard/PageHeader";
-import { getAllQuestionsRequest } from "../../api/questions.api";
-import { useEffect, useState } from "react";
-import { usePagination } from "../../hooks/usePagination";
 import FilterLetterModal from "../../components/UI/Modals/FilterLetterModal";
 import AddQuestionModal from "../../components/UI/Modals/AddQuestionModal";
-import { useRefresh } from "../../hooks/useRefresh";
 import DeleteModal from "../../components/UI/Modals/DeleteModal";
-import { deleteQuestionRequest } from "../../api/questions.api";
-import EditQuestionModal from "../../components/UI/Modals/EditQuestionModal";
+
+// Hooks
+import { useEffect, useState } from "react";
+import { usePagination } from "../../hooks/usePagination";
+import { useRefresh } from "../../hooks/useRefresh";
 import { useModal } from "../../hooks/useModal";
+
+// Requests functions
+import { getAllQuestionsRequest } from "../../api/questions.api";
+import { deleteQuestionRequest } from "../../api/questions.api";
+
+const tableColumns = ["Letter", "Question", "Answer", "Created By", "Action"];
 
 export default function QuestionPage() {
   const [data, setData] = useState(null);
@@ -46,7 +53,9 @@ export default function QuestionPage() {
         setData(response.questions);
         setTotalPages(response.totalPages);
       } catch (error) {
-        setError(error.message || "Problem in fetching questions...");
+        setError(
+          error.response?.data?.message || "Problem in fetching questions...",
+        );
       } finally {
         setIsFetching(false);
       }
@@ -69,10 +78,12 @@ export default function QuestionPage() {
         data={data}
         isFetching={isFetching}
         error={error}
-        columns={["Letter", " Question", "Answer", "Created By", "Action"]}
+        columns={tableColumns}
         page={page}
         totalPages={totalPages}
         onPageChange={setPage}
+        noDataTitle="No Questions Available"
+        noDataMessage="Questions will appear here."
         handleOpenDelete={(row) => deleteModal.open(row)}
         handleOpenEdit={(row) => editModal.open(row)}
       />

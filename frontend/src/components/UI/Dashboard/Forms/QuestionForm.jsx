@@ -13,9 +13,7 @@ export default function QuestionForm({
   successMessage,
   failMessage,
 }) {
-  console.log(initialValues?.id);
   const [letters, setLetters] = useState([]);
-  const [error, setError] = useState(null);
   const [formState, formAction] = useActionState(submitQuestionAction, {
     errors: null,
   });
@@ -27,7 +25,6 @@ export default function QuestionForm({
     const letterId = formData.get("letter_id");
     const questionText = formData.get("question");
     const answer = formData.get("answer");
-    const adminId = admin.id;
 
     const selectedLetter = letters.find(
       (letter) => letter.id === Number(letterId),
@@ -75,7 +72,7 @@ export default function QuestionForm({
       showToast(successMessage, "success");
       return { errors: null };
     } catch (error) {
-      showToast(failMessage, "fail");
+      showToast(failMessage, "error");
       return {
         errors: {
           general: error.response?.data?.message || failMessage,
