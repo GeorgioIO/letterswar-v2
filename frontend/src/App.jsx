@@ -1,11 +1,14 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/auth/LoginPage.jsx";
 import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
+import SuperAdminRoute from "./components/UI/SuperAdminRoute.jsx";
 import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
 import HomePage from "./pages/dashboard/HomePage.jsx";
 import QuestionPage from "./pages/dashboard/QuestionsPage.jsx";
 import LettersPage from "./pages/dashboard/LettersPage.jsx";
 import Toast from "./components/UI/Toast.jsx";
+import AdminsPage from "./pages/dashboard/AdminsPage.jsx";
+
 function App() {
   return (
     <>
@@ -18,7 +21,7 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="questions" element={<QuestionPage />} />
             <Route path="letters" element={<LettersPage />} />
-            <Route path="admins" element={<h1>Admins</h1>} />
+            <Route path="admins" element={<AdminsPage />} />
           </Route>
         </Route>
 

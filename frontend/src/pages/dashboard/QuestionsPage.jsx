@@ -41,6 +41,21 @@ export default function QuestionPage() {
   const addModal = useModal();
   const editModal = useModal();
 
+  function renderQuestionRow(row) {
+    return (
+      <>
+        <div className="text-sm font-semibold text-orange-500">
+          {row.letter}
+        </div>
+        <div className="text-sm text-gray-700 truncate pr-4">
+          {row.question_text}
+        </div>
+        <div className="text-sm text-gray-700 truncate pr-4">{row.answer}</div>
+        <div className="text-sm text-gray-500">{row.created_by}</div>
+      </>
+    );
+  }
+
   useEffect(() => {
     async function getQuestions() {
       try {
@@ -85,6 +100,7 @@ export default function QuestionPage() {
         noDataMessage="Questions will appear here."
         handleOpenDelete={(row) => deleteModal.open(row)}
         handleOpenEdit={(row) => editModal.open(row)}
+        renderRow={renderQuestionRow}
       />
       <AddQuestionModal
         isOpen={addModal.isOpen}

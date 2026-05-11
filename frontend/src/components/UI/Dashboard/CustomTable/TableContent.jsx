@@ -3,6 +3,7 @@ import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 export default function TableContent({
   data,
+  renderRow,
   handleOpenDelete,
   handleOpenEdit,
 }) {
@@ -15,17 +16,7 @@ export default function TableContent({
           key={row.id ?? i}
           className="grid grid-cols-5 px-6 py-4 items-center hover:bg-orange-50 transition-colors"
         >
-          <div className="text-sm font-semibold text-orange-500">
-            {row.letter}
-          </div>
-          <div className="text-sm text-gray-700 truncate pr-4">
-            {row.question_text}
-          </div>
-          <div className="text-sm text-gray-700 truncate pr-4">
-            {row.answer}
-          </div>
-          <div className="text-sm text-gray-500">{row.created_by}</div>
-
+          {renderRow(row)}
           <div className="relative">
             <button
               onClick={() => setOpenMenu(openMenu === i ? null : i)}

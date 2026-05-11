@@ -72,7 +72,7 @@ export default function QuestionForm({
       showToast(successMessage, "success");
       return { errors: null };
     } catch (error) {
-      showToast(failMessage, "error");
+      showToast(failMessage, "fail");
       return {
         errors: {
           general: error.response?.data?.message || failMessage,
@@ -96,7 +96,11 @@ export default function QuestionForm({
   }, []);
 
   return (
-    <form action={formAction} className="flex flex-col gap-4 p-1">
+    <form
+      autoComplete="off"
+      action={formAction}
+      className="flex flex-col gap-4 p-1"
+    >
       <FormSelect
         label="Letter*"
         id="letter_id"
@@ -139,7 +143,7 @@ export default function QuestionForm({
       )}
       <button
         type="submit"
-        className="mt-2 h-10 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
+        className="cursor-pointer mt-2 h-10 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
       >
         Submit
       </button>

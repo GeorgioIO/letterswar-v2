@@ -9,10 +9,8 @@ export async function getAllAdmins() {
             username,
             email,
             role,
-            created_at,
-            is_deleted
-        FROM admins
-        WHERE is_deleted = FALSE;
+            created_at
+        FROM admins;
         `);
 
   return rows;

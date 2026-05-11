@@ -16,6 +16,7 @@ export default function CustomTable({
   onPageChange,
   handleOpenDelete,
   handleOpenEdit,
+  renderRow,
 }) {
   if (isFetching) {
     return <Loading />;
@@ -57,6 +58,7 @@ export default function CustomTable({
           data={data}
           handleOpenDelete={handleOpenDelete}
           handleOpenEdit={handleOpenEdit}
+          renderRow={renderRow}
         />
       </div>
       {/* Footer */}

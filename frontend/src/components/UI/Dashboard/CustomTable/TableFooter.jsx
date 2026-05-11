@@ -34,6 +34,8 @@ export default function TableFooter({ page, totalPages, onPageChange }) {
     });
   }
 
+  if (!page || !totalPages || !onPageChange) return null;
+
   return (
     <footer className="flex justify-between items-center px-6 py-4 border-t border-gray-100">
       <NavigationButton onClick={handlePreviousClick} disabled={page === 1}>

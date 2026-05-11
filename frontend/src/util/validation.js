@@ -13,3 +13,9 @@ export function isNotEmpty(value) {
   }
   return value !== null && value !== undefined;
 }
+
+export function notStrongPass(password) {
+  return (
+    password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)
+  );
+}
