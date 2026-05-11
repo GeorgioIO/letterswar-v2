@@ -7,14 +7,12 @@ import AuthContextProvider from "./store/AuthContext.jsx";
 import ToastContextProvider from "./store/ToastContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <ToastContextProvider>
-        {" "}
-        <AuthContextProvider>
-          <App />
-        </AuthContextProvider>
-      </ToastContextProvider>
-    </BrowserRouter>
-  </StrictMode>,
+  <BrowserRouter>
+    <ToastContextProvider>
+      {" "}
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
+    </ToastContextProvider>
+  </BrowserRouter>,
 );

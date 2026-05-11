@@ -16,7 +16,8 @@ export async function getAllQuestions(page, limit, letter) {
   const [rows] = await pool.query(
     `
     SELECT
-	    q.id,
+	      q.id,
+        q.letter_id,
         q.question_text,
         q.answer,
         q.is_deleted,

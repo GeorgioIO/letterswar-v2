@@ -1,10 +1,10 @@
+import QuestionForm from "../Dashboard/Forms/QuestionForm";
 import ModalHeader from "./ModalHeader";
 import { Puzzle } from "lucide-react";
+import { updateQuestionRequest } from "../../../api/questions.api";
 import Modal from "./Modal";
-import QuestionForm from "../Dashboard/Forms/QuestionForm";
-import { createQuestionRequest } from "../../../api/questions.api.js";
-
-export default function AddQuestionModal({
+export default function EditQuestionModal({
+  question,
   isOpen,
   handleClose,
   handleRefresh,
@@ -14,12 +14,13 @@ export default function AddQuestionModal({
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <ModalHeader
-        title="Add Question"
+        title="Edit Question"
         Icon={Puzzle}
         handleClose={handleClose}
       />
       <QuestionForm
-        onSubmit={createQuestionRequest}
+        initialValues={question}
+        onSubmit={updateQuestionRequest}
         handleRefresh={handleRefresh}
         successMessage={successMessage}
         failMessage={failMessage}

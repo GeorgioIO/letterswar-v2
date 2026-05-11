@@ -8,6 +8,7 @@ import AddQuestionModal from "../../components/UI/Modals/AddQuestionModal";
 import { useRefresh } from "../../hooks/useRefresh";
 import DeleteModal from "../../components/UI/Modals/DeleteModal";
 import { deleteQuestionRequest } from "../../api/questions.api";
+import EditQuestionModal from "../../components/UI/Modals/EditQuestionModal";
 
 export default function QuestionPage() {
   const [data, setData] = useState(null);
@@ -17,6 +18,7 @@ export default function QuestionPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [letterSelected, setLetterSelected] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   const { refreshKey, handleRefresh } = useRefresh();
@@ -56,6 +58,16 @@ export default function QuestionPage() {
     setSelectedQuestion(null);
   }
 
+  function handleOpenEdit(question) {
+    setIsEditing(true);
+    setSelectedQuestion(question);
+  }
+
+  function handleCloseEdit() {
+    setIsEditing(false);
+    setSelectedQuestion(null);
+  }
+
   useEffect(() => {
     async function getQuestions() {
       setIsFetching(true);
@@ -79,6 +91,14 @@ export default function QuestionPage() {
 
   return (
     <section className="flex flex-col gap-5">
+      <EditQuestionModal
+        question={selectedQuestion}
+        isOpen={isEditing}
+        handleClose={handleCloseEdit}
+        handleRefresh={handleRefresh}
+        successMessage="Question updated successfully"
+        failMessage="Question failed to update"
+      />
       <DeleteModal
         isOpen={isDeleting}
         handleClose={handleCloseDelete}
@@ -99,6 +119,8 @@ export default function QuestionPage() {
         isOpen={isAdding}
         handleClose={handelCloseAddQuestion}
         handleRefresh={handleRefresh}
+        successMessage="Question added successfully"
+        failMessage="Fail to add question"
       />
       <FilterLetterModal
         isOpen={isFiltering}
@@ -124,6 +146,7 @@ export default function QuestionPage() {
         totalPages={totalPages}
         onPageChange={setPage}
         handleOpenDelete={handleOpenDelete}
+        handleOpenEdit={handleOpenEdit}
       />
     </section>
   );

@@ -10,16 +10,19 @@ export default function QuestionForm({
   initialValues,
   onSubmit,
   handleRefresh,
+  successMessage,
+  failMessage,
 }) {
+  console.log(initialValues?.id);
   const [letters, setLetters] = useState([]);
   const [error, setError] = useState(null);
-  const [formState, formAction] = useActionState(addQuestionAction, {
+  const [formState, formAction] = useActionState(submitQuestionAction, {
     errors: null,
   });
   const { admin } = useAuth();
   const { showToast } = useToast();
 
-  async function addQuestionAction(prevState, formData) {
+  async function submitQuestionAction(prevState, formData) {
     // Get needed data
     const letterId = formData.get("letter_id");
     const questionText = formData.get("question");
@@ -53,20 +56,29 @@ export default function QuestionForm({
 
     // Submit
     try {
-      await onSubmit({
-        letter_id: letterId,
-        letter: selectedLetter,
-        question_text: questionText,
-        answer,
-      });
+      if (initialValues) {
+        await onSubmit(initialValues.id, {
+          letter_id: letterId,
+          letter: selectedLetter,
+          question_text: questionText,
+          answer,
+        });
+      } else {
+        await onSubmit({
+          letter_id: letterId,
+          letter: selectedLetter,
+          question_text: questionText,
+          answer,
+        });
+      }
       handleRefresh();
-      showToast("Question added successfully", "success");
+      showToast(successMessage, "success");
       return { errors: null };
     } catch (error) {
-      showToast("Adding question failed", "fail");
+      showToast(failMessage, "fail");
       return {
         errors: {
-          general: error.response?.data?.message || "Problem Adding Question",
+          general: error.response?.data?.message || failMessage,
           errors,
         },
         enteredValues: { letterId, questionText, answer },
@@ -94,7 +106,11 @@ export default function QuestionForm({
         name="letter_id"
         placeholder="Select A Letter"
         error={formState.errors?.letter_id}
-        defaultValue={formState.enteredValues?.letterId}
+        value={
+          initialValues
+            ? Number(initialValues.letter_id)
+            : formState.enteredValues?.letterId
+        }
         options={letters}
       />
       <FormInput
@@ -103,7 +119,11 @@ export default function QuestionForm({
         name="question"
         placeholder="Question"
         error={formState.errors?.questionText}
-        defaultValue={formState.enteredValues?.questionText}
+        defaultValue={
+          initialValues
+            ? initialValues.question_text
+            : formState.enteredValues?.questionText
+        }
       />
       <FormInput
         label="Answer*"
@@ -111,7 +131,9 @@ export default function QuestionForm({
         name="answer"
         placeholder="Answer"
         error={formState.errors?.answer}
-        defaultValue={formState.enteredValues?.answer}
+        defaultValue={
+          initialValues ? initialValues.answer : formState.enteredValues?.answer
+        }
       />
       {formState.errors?.general && (
         <p className="text-red-400 text-xs text-center">
@@ -122,7 +144,7 @@ export default function QuestionForm({
         type="submit"
         className="mt-2 h-10 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
       >
-        Save Question
+        Submit
       </button>
     </form>
   );

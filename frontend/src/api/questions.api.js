@@ -28,6 +28,7 @@ export async function createQuestionRequest(data) {
 
 // TODO Update question
 export async function updateQuestionRequest(id, data) {
+  console.log("id in function: ", id);
   const response = await api.put(`/questions/${id}`, data);
   return response.data;
 }

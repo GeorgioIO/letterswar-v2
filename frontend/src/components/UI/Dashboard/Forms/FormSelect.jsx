@@ -6,6 +6,9 @@ export default function FormSelect({
   error,
   ...props
 }) {
+  console.log("defaultValue prop:", props.defaultValue);
+  console.log("letters:", options);
+
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-sm font-medium text-gray-600">
@@ -23,7 +26,7 @@ export default function FormSelect({
         {options.map((opt) => {
           const keys = Object.keys(opt);
           return (
-            <option key={opt.id} value={opt.id}>
+            <option key={opt.id} value={Number(opt.id)}>
               {opt[keys[1]]}
             </option>
           );

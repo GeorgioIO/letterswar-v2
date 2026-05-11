@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
-export default function TableContent({ data, handleOpenDelete }) {
+export default function TableContent({
+  data,
+  handleOpenDelete,
+  handleOpenEdit,
+}) {
   const [openMenu, setOpenMenu] = useState(null);
 
   return (
@@ -32,7 +36,10 @@ export default function TableContent({ data, handleOpenDelete }) {
 
             {openMenu === i && (
               <div className="absolute right-0 top-8 z-10 w-40 bg-white border border-gray-100 rounded-xl shadow-md py-1.5 overflow-hidden">
-                <button className="cursor-pointer  w-full flex items-center gap-2.5 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                <button
+                  onClick={() => handleOpenEdit(row)}
+                  className="cursor-pointer  w-full flex items-center gap-2.5 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                >
                   <Pencil size={14} className="text-gray-400" />
                   Edit
                 </button>

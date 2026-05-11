@@ -11,6 +11,7 @@ export default function CustomTable({
   totalPages,
   onPageChange,
   handleOpenDelete,
+  handleOpenEdit,
 }) {
   if (isFetching) {
     return <p>Loading...</p>;
@@ -25,7 +26,11 @@ export default function CustomTable({
         {/* Header */}
         <TableHeader columns={columns} />
         {/* Content */}
-        <TableContent data={data} handleOpenDelete={handleOpenDelete} />
+        <TableContent
+          data={data}
+          handleOpenDelete={handleOpenDelete}
+          handleOpenEdit={handleOpenEdit}
+        />
       </div>
       {/* Footer */}
       <TableFooter
