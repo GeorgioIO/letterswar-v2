@@ -51,9 +51,8 @@ export async function updateAdmin(id, username, email, password, role) {
 export async function deleteAdmin(id) {
   const [result] = await pool.query(
     `
-        UPDATE admins 
-        SET is_deleted = TRUE 
-        WHERE id = ?`,
+      DELETE FROM admins WHERE id = ?
+    `,
     [id],
   );
 

@@ -1,11 +1,13 @@
 import CustomTable from "../../components/UI/Dashboard/CustomTable/CustomTable";
 import PageHeader from "../../components/UI/Dashboard/PageHeader";
-import { getAllAdminsRequest } from "../../api/admins.api";
+import { getAllAdminsRequest, deleteAdminRequest } from "../../api/admins.api";
 import { useState, useEffect } from "react";
 import { Shield, ShieldCheck } from "lucide-react";
 import AddAdminModal from "../../components/UI/Modals/AddAdminModal";
 import { useModal } from "../../hooks/useModal";
 import { useRefresh } from "../../hooks/useRefresh";
+import DeleteModal from "../../components/UI/Modals/DeleteModal";
+
 const tableColumns = ["Username", "Email", "Role", "Created At", "Action"];
 
 export default function AdminsPage() {
@@ -14,6 +16,7 @@ export default function AdminsPage() {
   const [isFetching, setIsFetching] = useState(true);
 
   const addModal = useModal();
+  const deleteModal = useModal();
   const { refreshKey, handleRefresh } = useRefresh();
 
   useEffect(() => {
@@ -74,6 +77,9 @@ export default function AdminsPage() {
         isFetching={isFetching}
         error={error}
         renderRow={renderAdminRow}
+        noDataTitle="No Admins Available"
+        noDataMessage="Admins appear here."
+        handleOpenDelete={(row) => deleteModal.open(row)}
       />
       <AddAdminModal
         isOpen={addModal.isOpen}
@@ -81,6 +87,16 @@ export default function AdminsPage() {
         successMessage="Admin added successfully"
         failMessage="Failed to add admin"
         handleRefresh={handleRefresh}
+      />
+      <DeleteModal
+        isOpen={deleteModal.isOpen}
+        handleClose={deleteModal.close}
+        title="Delete Admin"
+        successMessage="Admin deleted successfully"
+        failMessage="Problem deleting admin"
+        message="You're going to delete this admin. Are you sure?"
+        deleteRequest={() => deleteAdminRequest(deleteModal.data?.id)}
+        onSuccess={handleRefresh}
       />
     </section>
   );

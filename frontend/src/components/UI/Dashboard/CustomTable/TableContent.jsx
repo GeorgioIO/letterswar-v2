@@ -27,14 +27,18 @@ export default function TableContent({
 
             {openMenu === i && (
               <div className="absolute right-0 top-8 z-10 w-40 bg-white border border-gray-100 rounded-xl shadow-md py-1.5 overflow-hidden">
-                <button
-                  onClick={() => handleOpenEdit(row)}
-                  className="cursor-pointer  w-full flex items-center gap-2.5 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
-                >
-                  <Pencil size={14} className="text-gray-400" />
-                  Edit
-                </button>
-                <hr className="border-gray-100 mx-3" />
+                {handleOpenEdit && (
+                  <>
+                    <button
+                      onClick={() => handleOpenEdit(row)}
+                      className="cursor-pointer  w-full flex items-center gap-2.5 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                      <Pencil size={14} className="text-gray-400" />
+                      Edit
+                    </button>
+                    <hr className="border-gray-100 mx-3" />
+                  </>
+                )}
                 <button
                   onClick={() => handleOpenDelete(row)}
                   className="cursor-pointer w-full flex items-center gap-2.5 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"

@@ -3,12 +3,13 @@ import FormSelect from "./FormSelect";
 import FormRadio from "./FormRadio";
 import { useToast } from "../../../../hooks/useToast";
 import { createAdminRequest } from "../../../../api/admins.api";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import {
   isNotEmpty,
   isValidEmail,
   notStrongPass,
 } from "../../../../util/validation";
+import { Eye, EyeOff } from "lucide-react";
 
 const adminRoles = [
   { value: "superadmin", label: "Super Admin" },
@@ -23,7 +24,9 @@ export default function AdminForm({
   const [formState, formAction] = useActionState(submitAdminAction, {
     errors: null,
   });
+  const [showPass, setShowPass] = useState(false);
   const { showToast } = useToast();
+
   async function submitAdminAction(prevState, formData) {
     // Get needed data
     const username = formData.get("username");
@@ -75,6 +78,10 @@ export default function AdminForm({
     }
   }
 
+  function handleToggleShowPass() {
+    setShowPass((prevState) => !prevState);
+  }
+
   return (
     <form
       action={formAction}
@@ -103,9 +110,18 @@ export default function AdminForm({
         id="password"
         name="password"
         placeholder="Password"
-        type="password"
+        type={showPass ? "text" : "password"}
         defaultValue={formState.enteredValues?.password}
         error={formState.errors?.password}
+        toggleButton={
+          <button
+            type="button"
+            onClick={handleToggleShowPass}
+            className="cursor-pointer "
+          >
+            {showPass ? <Eye color="#8A929F" /> : <EyeOff color="#8A929F" />}
+          </button>
+        }
       />
       <FormRadio
         label="Select Admin Role"

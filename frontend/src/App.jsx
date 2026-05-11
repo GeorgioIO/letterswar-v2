@@ -21,7 +21,14 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="questions" element={<QuestionPage />} />
             <Route path="letters" element={<LettersPage />} />
-            <Route path="admins" element={<AdminsPage />} />
+            <Route
+              path="admins"
+              element={
+                <SuperAdminRoute>
+                  <AdminsPage />
+                </SuperAdminRoute>
+              }
+            />
           </Route>
         </Route>
 
