@@ -6,6 +6,8 @@ import { usePagination } from "../../hooks/usePagination";
 import FilterLetterModal from "../../components/UI/Modals/FilterLetterModal";
 import AddQuestionModal from "../../components/UI/Modals/AddQuestionModal";
 import { useRefresh } from "../../hooks/useRefresh";
+import DeleteModal from "../../components/UI/Modals/DeleteModal";
+import { deleteQuestionRequest } from "../../api/questions.api";
 
 export default function QuestionPage() {
   const [data, setData] = useState(null);
@@ -14,8 +16,10 @@ export default function QuestionPage() {
   const [isFiltering, setIsFiltering] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [letterSelected, setLetterSelected] = useState(null);
-  const { refreshKey, handleRefresh } = useRefresh();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
+  const { refreshKey, handleRefresh } = useRefresh();
   const {
     page,
     limit,
@@ -42,6 +46,16 @@ export default function QuestionPage() {
     setIsAdding(false);
   }
 
+  function handleOpenDelete(question) {
+    setIsDeleting(true);
+    setSelectedQuestion(question);
+  }
+
+  function handleCloseDelete() {
+    setIsDeleting(false);
+    setSelectedQuestion(null);
+  }
+
   useEffect(() => {
     async function getQuestions() {
       setIsFetching(true);
@@ -65,6 +79,22 @@ export default function QuestionPage() {
 
   return (
     <section className="flex flex-col gap-5">
+      <DeleteModal
+        isOpen={isDeleting}
+        handleClose={handleCloseDelete}
+        title="Delete Question"
+        successMessage="Question deleted successfully"
+        failMessage="Problem deleting question"
+        message="You're going to delete this question. Are you sure?"
+        deleteRequest={() => deleteQuestionRequest(selectedQuestion.id)}
+        onSuccess={() => {
+          handleRefresh();
+
+          if (data.length === 1 && page > 1) {
+            setPage((prev) => prev - 1);
+          }
+        }}
+      />
       <AddQuestionModal
         isOpen={isAdding}
         handleClose={handelCloseAddQuestion}
@@ -93,6 +123,7 @@ export default function QuestionPage() {
         page={page}
         totalPages={totalPages}
         onPageChange={setPage}
+        handleOpenDelete={handleOpenDelete}
       />
     </section>
   );

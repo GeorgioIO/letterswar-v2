@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
-export default function TableContent({ data }) {
+export default function TableContent({ data, handleOpenDelete }) {
   const [openMenu, setOpenMenu] = useState(null);
 
   return (
@@ -25,16 +25,25 @@ export default function TableContent({ data }) {
           <div className="relative">
             <button
               onClick={() => setOpenMenu(openMenu === i ? null : i)}
-              className="p-1.5 rounded-lg hover:bg-orange-100 text-gray-400 hover:text-orange-500 transition-colors"
+              className="cursor-pointer p-1.5 rounded-lg hover:bg-orange-100 text-gray-400 hover:text-orange-500 transition-colors"
             >
               <MoreHorizontal size={18} />
             </button>
 
             {openMenu === i && (
-              <div className="absolute right-0 top-8 z-10 w-36 bg-white border border-gray-100 rounded-xl shadow-lg py-1.5">
-                {/* buttons go here */}
-                <button>Edit</button>
-                <button>Delete</button>
+              <div className="absolute right-0 top-8 z-10 w-40 bg-white border border-gray-100 rounded-xl shadow-md py-1.5 overflow-hidden">
+                <button className="cursor-pointer  w-full flex items-center gap-2.5 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                  <Pencil size={14} className="text-gray-400" />
+                  Edit
+                </button>
+                <hr className="border-gray-100 mx-3" />
+                <button
+                  onClick={() => handleOpenDelete(row)}
+                  className="cursor-pointer w-full flex items-center gap-2.5 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                >
+                  <Trash2 size={14} />
+                  Delete
+                </button>
               </div>
             )}
           </div>
