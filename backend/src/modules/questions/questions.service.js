@@ -101,7 +101,7 @@ export async function updateQuestion(
     `
         UPDATE questions 
         SET question_text = ?, answer = ?, letter_id = ?, updated_by = ?
-        WHERE id = ? AND is_deleted = FALSE
+        WHERE id = ? 
         `,
     [question_text, answer, letter_id, admin_id, id],
   );

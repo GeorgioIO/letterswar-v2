@@ -72,6 +72,7 @@ export default function QuestionForm({
       showToast(successMessage, "success");
       return { errors: null };
     } catch (error) {
+      console.log(error);
       showToast(failMessage, "fail");
       return {
         errors: {
