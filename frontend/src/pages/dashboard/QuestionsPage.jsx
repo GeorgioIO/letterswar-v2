@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import FilterLetterModal from "../../components/UI/Modals/FilterLetterModal";
 import AddQuestionModal from "../../components/UI/Modals/AddQuestionModal";
+import { useRefresh } from "../../hooks/useRefresh";
 
 export default function QuestionPage() {
   const [data, setData] = useState(null);
@@ -13,6 +14,7 @@ export default function QuestionPage() {
   const [isFiltering, setIsFiltering] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [letterSelected, setLetterSelected] = useState(null);
+  const { refreshKey, handleRefresh } = useRefresh();
 
   const {
     page,
@@ -59,13 +61,14 @@ export default function QuestionPage() {
     }
 
     getQuestions();
-  }, [page, limit, letterSelected]);
+  }, [page, limit, letterSelected, refreshKey]);
 
   return (
     <section className="flex flex-col gap-5">
       <AddQuestionModal
         isOpen={isAdding}
         handleClose={handelCloseAddQuestion}
+        handleRefresh={handleRefresh}
       />
       <FilterLetterModal
         isOpen={isFiltering}

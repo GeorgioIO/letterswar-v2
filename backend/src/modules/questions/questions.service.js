@@ -26,6 +26,7 @@ export async function getAllQuestions(page, limit, letter) {
     JOIN letters l ON q.letter_id = l.id
     LEFT JOIN admins a ON q.created_by = a.id
     ${whereClause}
+    ORDER BY q.answer 
     LIMIT ? OFFSET ? 
     `,
     [...params, limit, offset],

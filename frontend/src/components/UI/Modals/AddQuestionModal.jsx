@@ -4,7 +4,11 @@ import Modal from "./Modal";
 import QuestionForm from "../Dashboard/Forms/QuestionForm";
 import { createQuestionRequest } from "../../../api/questions.api.js";
 
-export default function AddQuestionModal({ isOpen, handleClose }) {
+export default function AddQuestionModal({
+  isOpen,
+  handleClose,
+  handleRefresh,
+}) {
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <ModalHeader
@@ -12,7 +16,10 @@ export default function AddQuestionModal({ isOpen, handleClose }) {
         Icon={Puzzle}
         handleClose={handleClose}
       />
-      <QuestionForm onSubmit={createQuestionRequest} />
+      <QuestionForm
+        onSubmit={createQuestionRequest}
+        handleRefresh={handleRefresh}
+      />
     </Modal>
   );
 }

@@ -6,7 +6,11 @@ import { useAuth } from "../../../../hooks/useAuth";
 import { isNotEmpty } from "../../../../util/validation";
 import { useToast } from "../../../../hooks/useToast";
 
-export default function QuestionForm({ initialValues, onSubmit }) {
+export default function QuestionForm({
+  initialValues,
+  onSubmit,
+  handleRefresh,
+}) {
   const [letters, setLetters] = useState([]);
   const [error, setError] = useState(null);
   const [formState, formAction] = useActionState(addQuestionAction, {
@@ -55,6 +59,7 @@ export default function QuestionForm({ initialValues, onSubmit }) {
         question_text: questionText,
         answer,
       });
+      handleRefresh();
       showToast("Question added successfully", "success");
       return { errors: null };
     } catch (error) {
