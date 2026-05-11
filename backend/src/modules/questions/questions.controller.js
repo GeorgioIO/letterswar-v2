@@ -8,13 +8,17 @@ export async function getAll(req, res) {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const letter = req.query.letter || null;
+  const showDeleted = parseInt(req.query.showDeleted) || 0;
 
   try {
     const questions = await questionServices.getAllQuestions(
       page,
       limit,
       letter,
+      showDeleted,
     );
+
+    console.log(questions);
     res.json(questions);
   } catch (error) {
     res

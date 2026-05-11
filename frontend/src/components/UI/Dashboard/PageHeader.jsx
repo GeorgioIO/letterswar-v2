@@ -9,6 +9,7 @@ export default function PageHeader({
   openAdd,
   limit,
   onLimitChange,
+  onDeletedChange,
 }) {
   return (
     <header className="w-full bg-white border-b border-gray-100 px-6 h-15 flex items-center justify-between">
@@ -33,6 +34,21 @@ export default function PageHeader({
             </select>
           </div>
         )}
+        <div className="flex items-center gap-2 px-3 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+          <input
+            type="checkbox"
+            name="show-deleted"
+            id="show-deleted"
+            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+            onChange={onDeletedChange}
+          />
+          <label
+            htmlFor="show-deleted"
+            className="text-sm font-medium text-gray-600 cursor-pointer select-none"
+          >
+            Show deleted
+          </label>
+        </div>
         {openFiltering && (
           <OutlineButton onClick={openFiltering}>
             <Funnel size={15} /> Filter

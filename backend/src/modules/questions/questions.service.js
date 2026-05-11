@@ -2,11 +2,11 @@ import pool from "../../config/db.js";
 
 // in this file we place the functions that talk to the database
 
-export async function getAllQuestions(page, limit, letter) {
+export async function getAllQuestions(page, limit, letter, showDeleted) {
   const offset = (page - 1) * limit;
 
-  let whereClause = "WHERE q.is_deleted = FALSE";
-  const params = [];
+  let whereClause = "WHERE q.is_deleted = ?";
+  const params = [showDeleted];
 
   if (letter) {
     whereClause += " AND l.letter = ?";
@@ -30,7 +30,7 @@ export async function getAllQuestions(page, limit, letter) {
     ORDER BY q.answer 
     LIMIT ? OFFSET ? 
     `,
-    [...params, limit, offset],
+    [...params, limit, offset, showDeleted],
   );
 
   const [[{ total }]] = await pool.query(

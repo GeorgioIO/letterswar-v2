@@ -5,10 +5,16 @@ export async function getAllQuestionsRequest(
   page = 1,
   limit = 10,
   letter = null,
+  showDeleted = false,
 ) {
   const params = { page, limit };
 
   if (letter) params.letter = letter;
+  if (showDeleted) {
+    params.showDeleted = 1;
+  } else {
+    params.showDeleted = 0;
+  }
 
   const response = await api.get(`/questions`, { params });
   return response.data;

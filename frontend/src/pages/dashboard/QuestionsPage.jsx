@@ -23,6 +23,7 @@ export default function QuestionPage() {
   const [error, setError] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
   const [letterSelected, setLetterSelected] = useState(null);
+  const [showDeleted, setShowDeleted] = useState(false);
 
   const { refreshKey, handleRefresh } = useRefresh();
   const {
@@ -35,12 +36,37 @@ export default function QuestionPage() {
     resetPage,
   } = usePagination();
 
+  // Get data
+  useEffect(() => {
+    async function getQuestions() {
+      try {
+        const response = await getAllQuestionsRequest(
+          page,
+          limit,
+          letterSelected,
+          showDeleted,
+        );
+        setData(response.questions);
+        setTotalPages(response.totalPages);
+      } catch (error) {
+        setError(
+          error.response?.data?.message || "Problem in fetching questions...",
+        );
+      } finally {
+        setIsFetching(false);
+      }
+    }
+
+    getQuestions();
+  }, [page, limit, letterSelected, showDeleted, refreshKey]);
+
   // Modals
   const filterModal = useModal();
   const deleteModal = useModal();
   const addModal = useModal();
   const editModal = useModal();
 
+  // Functions
   function renderQuestionRow(row) {
     return (
       <>
@@ -56,27 +82,9 @@ export default function QuestionPage() {
     );
   }
 
-  useEffect(() => {
-    async function getQuestions() {
-      try {
-        const response = await getAllQuestionsRequest(
-          page,
-          limit,
-          letterSelected,
-        );
-        setData(response.questions);
-        setTotalPages(response.totalPages);
-      } catch (error) {
-        setError(
-          error.response?.data?.message || "Problem in fetching questions...",
-        );
-      } finally {
-        setIsFetching(false);
-      }
-    }
-
-    getQuestions();
-  }, [page, limit, letterSelected, refreshKey]);
+  function toggleShowDeleted() {
+    setShowDeleted((prevState) => !prevState);
+  }
 
   return (
     <section className="flex flex-col gap-5">
@@ -87,6 +95,7 @@ export default function QuestionPage() {
         openFiltering={filterModal.open}
         openAdd={addModal.open}
         onLimitChange={(val) => handleLimitChange(val)}
+        onDeletedChange={toggleShowDeleted}
       />
       <CustomTable
         data={data}
