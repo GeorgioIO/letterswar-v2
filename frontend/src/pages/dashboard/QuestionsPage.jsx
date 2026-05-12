@@ -18,7 +18,6 @@ import {
   deleteQuestionRequest,
   restoreQuestionRequest,
 } from "../../api/questions.api";
-import {} from "../../api/questions.api";
 import RestoreModal from "../../components/UI/Modals/RestoreModal";
 
 const tableColumns = ["Letter", "Question", "Answer", "Created By", "Action"];

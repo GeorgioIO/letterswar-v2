@@ -47,6 +47,6 @@ export async function deleteQuestionRequest(id) {
 
 // TODO Restore question
 export async function restoreQuestionRequest(id) {
-  const response = await api.patch(`/questions/${id}`);
+  const response = await api.patch(`/questions/${id}/restore`);
   return response.data;
 }

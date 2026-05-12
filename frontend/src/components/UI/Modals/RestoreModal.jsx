@@ -21,12 +21,12 @@ export default function RestoreModal({
       handleClose();
       showToast(successMessage, "success");
     } catch (error) {
-      showToast(error.response?.data?.message || failMessage, "fail");
+      showToast(error.response?.data?.message || failMessage, "error");
     }
   }
 
   return (
-    <Modal open={isOpen} handleClose={handleClose}>
+    <Modal open={isOpen} onClose={handleClose}>
       <div className="flex flex-col items-center text-center gap-4 p-2">
         <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
           <Download size={25} className="text-green-500" />

@@ -11,6 +11,12 @@ export default function TableContent({
 }) {
   const [openMenu, setOpenMenu] = useState(null);
 
+  function handleOpeningMenu(i) {
+    setOpenMenu(openMenu === i ? null : i);
+
+    setTimeout(() => setOpenMenu(null), 5000);
+  }
+
   return (
     <section className="divide-y divide-gray-100">
       {data.map((row, i) => (
@@ -21,7 +27,7 @@ export default function TableContent({
           {renderRow(row)}
           <div className="relative">
             <button
-              onClick={() => setOpenMenu(openMenu === i ? null : i)}
+              onClick={() => handleOpeningMenu(i)}
               className="cursor-pointer p-1.5 rounded-lg hover:bg-orange-100 text-gray-400 hover:text-orange-500 transition-colors"
             >
               <MoreHorizontal size={18} />
