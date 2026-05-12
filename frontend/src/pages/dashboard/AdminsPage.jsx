@@ -20,6 +20,7 @@ export default function AdminsPage() {
   const { refreshKey, handleRefresh } = useRefresh();
 
   useEffect(() => {
+    setIsFetching(true);
     async function fetchAdmins() {
       try {
         const data = await getAllAdminsRequest();
