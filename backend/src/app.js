@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import morgan from "morgan";
+import helmet from "helmet";
 import pool from "./config/db.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import questionRoutes from "./modules/questions/questions.routes.js";
@@ -16,7 +18,8 @@ const PORT = process.env.DB_PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-
+app.use(morgan("dev"));
+app.use(helmet());
 app.get("/", async (req, res) => {
   try {
     await pool.query("SELECT 1");
