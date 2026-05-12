@@ -6,9 +6,6 @@ export default function FormSelect({
   error,
   ...props
 }) {
-  console.log("defaultValue prop:", props.defaultValue);
-  console.log("letters:", options);
-
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-sm font-medium text-gray-600">

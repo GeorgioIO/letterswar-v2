@@ -2,19 +2,17 @@ import * as adminsServices from "./admins.service.js";
 import { isValidEmail, isNotEmpty } from "../../utils/validation.js";
 
 // ! Get all admins controller
-export async function getAll(req, res) {
+export async function getAll(req, res, next) {
   try {
     const admins = await adminsServices.getAllAdmins();
     res.json(admins);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error.message || "Problem in getting admins..." });
+    next(error);
   }
 }
 
 // ! Create admin controller
-export async function create(req, res) {
+export async function create(req, res, next) {
   try {
     const { username, email, password, role } = req.body;
 
@@ -35,14 +33,12 @@ export async function create(req, res) {
 
     res.status(201).json({ message: "Admin is created", id: newAdminId });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error.message || "Problem in creating admin..." });
+    next(error);
   }
 }
 
 // ! Update admin controller
-export async function update(req, res) {
+export async function update(req, res, next) {
   try {
     const { username, email, role, password } = req.body;
 
@@ -60,14 +56,12 @@ export async function update(req, res) {
 
     res.status(200).json({ message: "Admin updated successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error.message || "Problem in updating admin." });
+    next(error);
   }
 }
 
 // ! Delete admin controller
-export async function remove(req, res) {
+export async function remove(req, res, next) {
   try {
     const affectedRows = await adminsServices.deleteAdmin(req.params.id);
 
@@ -77,8 +71,6 @@ export async function remove(req, res) {
 
     res.status(200).json({ message: "Admin deleted successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error.message || "Problem in deleting admin..." });
+    next(error);
   }
 }

@@ -1,12 +1,10 @@
 import { getStats } from "./stats.service.js";
 
-export async function getAll(req, res) {
+export async function getAll(req, res, next) {
   try {
     const stats = await getStats();
     res.json(stats);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error.message || "Problem in getting stats..." });
+    next(error);
   }
 }

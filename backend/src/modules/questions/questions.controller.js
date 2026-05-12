@@ -4,7 +4,7 @@ import {
   isAnswerStartsWithLetter,
 } from "../../utils/validation.js";
 
-export async function getAll(req, res) {
+export async function getAll(req, res, next) {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const letter = req.query.letter || null;
@@ -21,13 +21,11 @@ export async function getAll(req, res) {
     console.log(questions);
     res.json(questions);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error.message || "Problem in getting questions..." });
+    next(error);
   }
 }
 
-export async function getOne(req, res) {
+export async function getOne(req, res, next) {
   const id = req.params.id;
 
   try {
@@ -39,13 +37,11 @@ export async function getOne(req, res) {
 
     res.json(question);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error.message || "Problem in getting question..." });
+    next(error);
   }
 }
 
-export async function create(req, res) {
+export async function create(req, res, next) {
   const { letter_id, letter, question_text, answer } = req.body;
 
   // Validation
@@ -74,13 +70,11 @@ export async function create(req, res) {
     );
     res.status(201).json({ message: "Question created", id: newId });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error.message || "Problem in creating question..." });
+    next(error);
   }
 }
 
-export async function update(req, res) {
+export async function update(req, res, next) {
   const { letter_id, letter, question_text, answer } = req.body;
 
   if (
@@ -114,13 +108,11 @@ export async function update(req, res) {
 
     return res.json({ message: "Question updated" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: error.message || "Problem in updating question..." });
+    next(error);
   }
 }
 
-export async function remove(req, res) {
+export async function remove(req, res, next) {
   const id = req.params.id;
 
   try {
@@ -132,13 +124,11 @@ export async function remove(req, res) {
 
     res.json({ message: "Question deleted" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: error.message || "Problem in deleting question..." });
+    next(error);
   }
 }
 
-export async function restore(req, res) {
+export async function restore(req, res, next) {
   const id = req.params.id;
 
   try {
@@ -150,8 +140,6 @@ export async function restore(req, res) {
 
     res.json({ message: "Question restored" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: error.message || "Problem in restoring question..." });
+    next(error);
   }
 }

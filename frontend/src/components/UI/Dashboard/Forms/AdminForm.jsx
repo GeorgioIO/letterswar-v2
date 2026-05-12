@@ -67,7 +67,10 @@ export default function AdminForm({
       showToast(successMessage, "success");
       return { errors: null };
     } catch (error) {
-      showToast(failMessage, "error");
+      console.log("full error:", error);
+      console.log("response:", error.response);
+      console.log("message:", error.response?.data?.message);
+      showToast(error.response?.data?.message || failMessage, "error");
       return {
         errors: {
           general: error.response?.data?.message || failMessage,

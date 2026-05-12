@@ -1,7 +1,7 @@
 import { login } from "./auth.service.js";
 import { isValidEmail, isNotEmpty } from "../../utils/validation.js";
 
-export async function loginController(req, res) {
+export async function loginController(req, res, next) {
   const { email, password } = req.body;
 
   // Validation
@@ -22,8 +22,6 @@ export async function loginController(req, res) {
     const data = await login(email, password);
     return res.json(data);
   } catch (error) {
-    return res.status(401).json({
-      message: error.message || "Problem trying to login, try again later...",
-    });
+    next(error);
   }
 }
