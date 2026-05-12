@@ -22,6 +22,7 @@ export default function EditQuestionModal({
         initialValues={question}
         onSubmit={updateQuestionRequest}
         handleRefresh={handleRefresh}
+        handleClose={handleClose}
         successMessage={successMessage}
         failMessage={failMessage}
       />

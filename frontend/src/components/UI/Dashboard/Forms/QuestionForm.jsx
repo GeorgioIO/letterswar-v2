@@ -10,6 +10,7 @@ export default function QuestionForm({
   initialValues,
   onSubmit,
   handleRefresh,
+  handleClose,
   successMessage,
   failMessage,
 }) {
@@ -68,6 +69,7 @@ export default function QuestionForm({
           answer,
         });
       }
+      handleClose();
       handleRefresh();
       showToast(successMessage, "success");
       return { errors: null };
