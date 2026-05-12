@@ -3,6 +3,7 @@ import TableContent from "./TableContent";
 import TableFooter from "./TableFooter";
 import TableHeader from "./TableHeader";
 import { CircleAlert, InboxIcon } from "lucide-react";
+import Error from "../../Error";
 
 export default function CustomTable({
   data,
@@ -25,17 +26,7 @@ export default function CustomTable({
   }
 
   if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-        <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-          <CircleAlert size={22} className="text-red-400" />
-        </div>
-        <p className="text-sm font-medium text-gray-700">
-          Something went wrong
-        </p>
-        <p className="text-xs text-gray-400">{error}</p>
-      </div>
-    );
+    return <Error errorMessage={error} />;
   }
 
   if (data.length === 0) {

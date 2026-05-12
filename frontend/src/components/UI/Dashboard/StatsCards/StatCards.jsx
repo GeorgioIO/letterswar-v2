@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import StatCard from "./StatCard";
 import { getAllStatsRequest } from "../../../../api/stats.api.js";
-
+import Error from "../../Error.jsx";
+import Loading from "../../Loading.jsx";
 export default function StatCards() {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
+    setIsFetching(true);
     async function getStats() {
       try {
         const data = await getAllStatsRequest();
@@ -15,19 +17,19 @@ export default function StatCards() {
       } catch (error) {
         setError(error.response?.data?.message || "Failed to load stats");
       } finally {
-        setLoading(false);
+        setIsFetching(false);
       }
     }
 
     getStats();
   }, []);
 
-  if (loading) {
-    return <p>Still Loading</p>;
+  if (isFetching) {
+    return <Loading />;
   }
 
   if (error) {
-    return <p>Failed to load stats...</p>;
+    return <Error errorMessage={error} />;
   }
 
   const cards = [

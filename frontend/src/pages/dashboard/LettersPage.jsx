@@ -9,6 +9,7 @@ export default function LettersPage() {
   const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
+    setIsFetching(true);
     async function fetchLetters() {
       try {
         const letters = await getAllLettersRequest();
@@ -26,7 +27,7 @@ export default function LettersPage() {
   return (
     <section className="flex flex-col gap-5">
       <PageHeader sectionTitle="Letters" />
-      <LettersGrid letters={letters} />
+      <LettersGrid letters={letters} isFetching={isFetching} error={error} />
     </section>
   );
 }

@@ -42,6 +42,7 @@ export default function QuestionPage() {
 
   // Get data
   useEffect(() => {
+    setIsFetching(true);
     async function getQuestions() {
       try {
         const response = await getAllQuestionsRequest(
