@@ -28,11 +28,11 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/questions", questionRoutes);
-app.use("/api/letters", lettersRoutes);
-app.use("/api/admins", adminsRoutes);
-app.use("/api/stats", statsRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/questions", questionRoutes);
+app.use("/api/v1/letters", lettersRoutes);
+app.use("/api/v1/admins", adminsRoutes);
+app.use("/api/v1/stats", statsRoutes);
 
 app.use(errorHandler);
 
