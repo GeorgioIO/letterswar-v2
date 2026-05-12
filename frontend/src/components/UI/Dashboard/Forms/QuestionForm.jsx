@@ -14,7 +14,6 @@ export default function QuestionForm({
   successMessage,
   failMessage,
 }) {
-  console.log(handleClose);
   const [letters, setLetters] = useState([]);
   const [formState, formAction] = useActionState(submitQuestionAction, {
     errors: null,

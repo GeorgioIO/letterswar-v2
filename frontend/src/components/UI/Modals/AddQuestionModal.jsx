@@ -21,6 +21,7 @@ export default function AddQuestionModal({
       <QuestionForm
         onSubmit={createQuestionRequest}
         handleRefresh={handleRefresh}
+        handleClose={handleClose}
         successMessage={successMessage}
         failMessage={failMessage}
       />
