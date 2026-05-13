@@ -1,26 +1,19 @@
 import { TextCursor, AudioLines } from "lucide-react";
-import { useState } from "react";
 
 const defaultButtonClasses = `cursor-pointer flex-1 flex justify-center items-center gap-2 py-2 px-4 text-sm font-bold rounded-lg transition-all`;
 
-export default function ModePicker() {
-  const [mode, setMode] = useState("input");
-
+export default function ModePicker({ pickedMode, handleModeChange }) {
   const active = "bg-white text-orange-600 shadow-sm border border-orange-100";
 
   const inputButtonClasses =
-    mode === "input"
+    pickedMode === "input"
       ? `${defaultButtonClasses} ${active}`
       : defaultButtonClasses;
 
   const voiceButtonClasses =
-    mode === "voice"
+    pickedMode === "voice"
       ? `${defaultButtonClasses} ${active}`
       : defaultButtonClasses;
-
-  function toggleMode(mode) {
-    setMode(mode);
-  }
 
   return (
     <div className="md:col-span-2 flex flex-col gap-6 items-center mt-4 md:mt-6">
@@ -30,7 +23,7 @@ export default function ModePicker() {
         </p>
         <div className="flex gap-1 w-full max-w-75 p-1 bg-slate-100 rounded-xl border border-slate-200">
           <button
-            onClick={() => toggleMode("input")}
+            onClick={() => handleModeChange("input")}
             type="button"
             className={inputButtonClasses}
           >
@@ -38,7 +31,7 @@ export default function ModePicker() {
             Input
           </button>
           <button
-            onClick={() => toggleMode("voice")}
+            onClick={() => handleModeChange("voice")}
             type="button"
             className={voiceButtonClasses}
           >

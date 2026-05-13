@@ -1,3 +1,13 @@
+import { useSelector } from "react-redux";
+
 export default function GamePlayPage() {
-  return <h1>Game Play Page</h1>;
+  const teams = useSelector((state) => state.game.teams);
+  const answerMode = useSelector((state) => state.game.answerMode);
+  return (
+    <section>
+      <p>{teams.orange.name}</p>
+      <p>{teams.green.name}</p>
+      <p>{answerMode}</p>
+    </section>
+  );
 }

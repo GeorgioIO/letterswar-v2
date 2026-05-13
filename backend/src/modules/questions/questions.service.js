@@ -73,6 +73,31 @@ export async function getQuestionById(id) {
   return rows[0] || null;
 }
 
+export async function getRandomQuestion(letter, excludeIds) {
+  let query = `    
+    SELECT
+      q.id,
+      q.question_text,
+      q.answer,
+      l.letter
+    FROM questions q
+    JOIN letters l ON q.letter_id = l.id
+    WHERE l.letter = ? AND q.is_deleted = FALSE `;
+
+  const params = [letter];
+
+  if (excludeIds.length > 0) {
+    query += " AND q.id NOT IN (?)";
+    params.push(excludeIds);
+  }
+
+  query += " ORDER BY RAND() LIMIT 1";
+
+  const [rows] = await pool.query(query, params);
+
+  return rows[0] || null;
+}
+
 export async function createQuestion(
   letter_id,
   question_text,

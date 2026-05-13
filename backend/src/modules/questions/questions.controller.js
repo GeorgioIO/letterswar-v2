@@ -41,6 +41,28 @@ export async function getOne(req, res, next) {
   }
 }
 
+export async function getRandomOne(req, res, next) {
+  const letter = req.query.letter;
+  const exclude = req.query.exclude;
+
+  const excludeIds = exclude ? exclude.split(",").map(Number) : [];
+
+  try {
+    const question = await questionServices.getRandomQuestion(
+      letter,
+      excludeIds,
+    );
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    res.json(question);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function create(req, res, next) {
   const { letter_id, letter, question_text, answer } = req.body;
 

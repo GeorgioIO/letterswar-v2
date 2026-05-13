@@ -1,13 +1,53 @@
 import ModePicker from "./ModePicker";
+
+import { useDispatch } from "react-redux";
+import { useActionState, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { gameActions } from "../../../../store/slices/gameSlice";
+
 export default function SetupForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [formState, formAction] = useActionState(setupAction, { errors: null });
+  const [gameMode, setGameMode] = useState("input");
+
+  function toggleMode(mode) {
+    setGameMode(mode);
+  }
+
+  function goBack() {
+    navigate("/game");
+  }
+
+  function setupAction(prevState, formData) {
+    let orangeTeamName = formData.get("orangeTeamName");
+    let greenTeamName = formData.get("greenTeamName");
+
+    if (!orangeTeamName) {
+      orangeTeamName = "Orange Team";
+    }
+
+    if (!greenTeamName) {
+      greenTeamName = "Green Team";
+    }
+
+    dispatch(gameActions.setTeamNames({ orangeTeamName, greenTeamName }));
+    dispatch(gameActions.setAnswerMode(gameMode));
+    navigate("/game/play");
+  }
+
   return (
-    <form className="w-full max-w-[95%] md:max-w-2xl mx-auto p-4 md:p-8 bg-white rounded-4xl shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 ">
+    <form
+      action={formAction}
+      className="w-full max-w-[95%] md:max-w-2xl mx-auto p-4 md:p-8 bg-white rounded-4xl shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 "
+    >
       {/* Left Side - Orange Team */}
       <div className="bg-linear-to-br from-orange-50/50 to-white p-5 rounded-2xl border-2 border-orange-100 shadow-sm transition-all hover:border-orange-200">
         <Input
           label="Orange Team"
           id="orangeTeamName"
           placeholder="Enter name"
+          name="orangeTeamName"
           accentColor="border-orange-200 focus:border-orange-500 focus:ring-orange-100"
         />
       </div>
@@ -18,16 +58,26 @@ export default function SetupForm() {
           label="Green Team"
           id="greenTeamName"
           placeholder="Enter name"
+          name="greenTeamName"
           accentColor="border-green-200 focus:border-green-500 focus:ring-green-100"
         />
       </div>
 
       {/* Bottom Side  */}
       <div className=" md:col-span-2 flex flex-col gap-8 justify-center mt-2 md:mt-4">
-        <ModePicker />
-        <button className="group relative cursor-pointer h-14 w-full md:w-64 md:self-center bg-orange-500 hover:bg-orange-600 text-white rounded-2xl text-lg font-bold shadow-lg shadow-orange-200 transition-all active:scale-95 flex items-center justify-center gap-3">
-          Start Match
-        </button>
+        <ModePicker pickedMode={gameMode} handleModeChange={toggleMode} />
+        <div className="flex flex-col gap-4 justify-center">
+          <button className="group relative cursor-pointer h-14 w-full md:w-64 md:self-center bg-orange-500 hover:bg-orange-600 text-white rounded-2xl text-lg font-bold shadow-lg shadow-orange-200 transition-all active:scale-95 flex items-center justify-center gap-3">
+            Start Match
+          </button>
+          <button
+            type="button"
+            onClick={goBack}
+            className="group relative cursor-pointer h-14 w-full md:w-64 md:self-center border border-gray-400 text-gray-400  rounded-2xl text-lg font-bold shadow-lg transition-all active:scale-95 flex items-center justify-center gap-3"
+          >
+            Go Back
+          </button>
+        </div>
       </div>
     </form>
   );
