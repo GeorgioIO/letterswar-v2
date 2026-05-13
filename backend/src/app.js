@@ -9,6 +9,7 @@ import questionRoutes from "./modules/questions/questions.routes.js";
 import lettersRoutes from "./modules/letters/letters.routes.js";
 import adminsRoutes from "./modules/admins/admins.routes.js";
 import statsRoutes from "./modules/stats/stats.routes.js";
+import boardRoutes from "./modules/board/board.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/v1/questions", questionRoutes);
 app.use("/api/v1/letters", lettersRoutes);
 app.use("/api/v1/admins", adminsRoutes);
 app.use("/api/v1/stats", statsRoutes);
+app.use("/api/v1/board", boardRoutes);
 
 app.use(errorHandler);
 
