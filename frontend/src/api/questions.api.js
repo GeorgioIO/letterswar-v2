@@ -20,6 +20,16 @@ export async function getAllQuestionsRequest(
   return response.data;
 }
 
+export async function getRandomQuestionRequest(letter, excludeIds = []) {
+  const params = { letter };
+  if (excludeIds.length > 0) {
+    params.exclude = excludeIds.join(",");
+  }
+
+  const response = await api.get("/questions/random", { params });
+  return response.data;
+}
+
 // TODO Get question
 export async function getQuestionByIdRequest(id) {
   const response = await api.get(`/questions/${id}`);

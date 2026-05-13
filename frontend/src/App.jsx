@@ -8,6 +8,9 @@ import QuestionPage from "./pages/dashboard/QuestionsPage.jsx";
 import LettersPage from "./pages/dashboard/LettersPage.jsx";
 import Toast from "./components/UI/Toast.jsx";
 import AdminsPage from "./pages/dashboard/AdminsPage.jsx";
+import GameHomePage from "./pages/game/GameHomePage.jsx";
+import GamePlayPage from "./pages/game/GamePlayPage.jsx";
+import GameSetupPage from "./pages/game/GameSetupPage.jsx";
 
 function App() {
   return (
@@ -15,7 +18,6 @@ function App() {
       <Toast />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<HomePage />} />
@@ -30,8 +32,10 @@ function App() {
               }
             />
           </Route>
+          <Route path="/game" element={<GameHomePage />} />
+          <Route path="/game/setup" element={<GameSetupPage />} />
+          <Route path="/game/play" element={<GamePlayPage />} />
         </Route>
-
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </>

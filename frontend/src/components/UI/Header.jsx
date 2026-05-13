@@ -1,8 +1,9 @@
 import LogoTitle from "./LogoTitle";
 
-export default function Header() {
+export default function Header({ className }) {
+  const cssClasses = `w-full py-5 px-5 ${className}`;
   return (
-    <header className=" w-full py-2.5">
+    <header className={cssClasses}>
       <LogoTitle />
     </header>
   );

@@ -10,7 +10,7 @@ import { Provider } from "react-redux";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <Provider value={store}>
+    <Provider store={store}>
       <ToastContextProvider>
         <AuthContextProvider>
           <App />
