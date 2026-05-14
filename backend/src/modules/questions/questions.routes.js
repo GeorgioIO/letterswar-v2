@@ -4,10 +4,9 @@ import { authenticate } from "../../middleware/auth.js";
 
 const router = Router();
 
-router.use(authenticate);
-
-router.get("/", questionsControllers.getAll);
 router.get("/random", questionsControllers.getRandomOne);
+router.use(authenticate);
+router.get("/", questionsControllers.getAll);
 router.get("/:id", questionsControllers.getOne);
 router.post("/", questionsControllers.create);
 router.put("/:id", questionsControllers.update);
