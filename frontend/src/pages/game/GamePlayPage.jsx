@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Board from "../../components/UI/Game/Board";
 import TeamPanel from "../../components/UI/Game/TeamPanel";
 import { getRandomQuestionRequest } from "../../api/questions.api";
+import QuestionOverlay from "../../components/UI/Game/QuestionOverlay";
 
 export default function GamePlayPage() {
   const dispatch = useDispatch();
@@ -44,7 +45,6 @@ export default function GamePlayPage() {
         cell.letter,
         usedQuestionIds,
       );
-      console.log(question);
       dispatch(gameActions.setActiveQuestion(question));
     } catch (error) {
       dispatch(gameActions.setPhase("picking"));
@@ -86,6 +86,8 @@ export default function GamePlayPage() {
           {phase === "stealing" && `Steal opportunity!`}
         </p>
       </div>
+
+      <QuestionOverlay />
     </section>
   );
 }

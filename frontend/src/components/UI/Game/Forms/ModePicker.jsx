@@ -6,7 +6,7 @@ export default function ModePicker({ pickedMode, handleModeChange }) {
   const active = "bg-white text-orange-600 shadow-sm border border-orange-100";
 
   const inputButtonClasses =
-    pickedMode === "input"
+    pickedMode === "text"
       ? `${defaultButtonClasses} ${active}`
       : defaultButtonClasses;
 
@@ -23,7 +23,7 @@ export default function ModePicker({ pickedMode, handleModeChange }) {
         </p>
         <div className="flex gap-1 w-full max-w-75 p-1 bg-slate-100 rounded-xl border border-slate-200">
           <button
-            onClick={() => handleModeChange("input")}
+            onClick={() => handleModeChange("text")}
             type="button"
             className={inputButtonClasses}
           >

@@ -9,7 +9,7 @@ export default function SetupForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formState, formAction] = useActionState(setupAction, { errors: null });
-  const [gameMode, setGameMode] = useState("input");
+  const [gameMode, setGameMode] = useState("text");
 
   function toggleMode(mode) {
     setGameMode(mode);
