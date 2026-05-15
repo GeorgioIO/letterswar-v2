@@ -33,7 +33,6 @@ export default function LoginForm() {
 
       navigate("/dashboard");
     } catch (error) {
-      console.log("errors");
       return {
         errors: { general: error.message, errors },
         enteredValues: { email, password },
