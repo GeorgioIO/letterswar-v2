@@ -2,28 +2,30 @@ import pool from "../../config/db.js";
 
 export async function generateBoard() {
   const [letters] = await pool.query(`
-    SELECT 
-        l.letter
-    FROM letters l
-    WHERE (
-        SELECT COUNT(*)
-        FROM  questions q
-        WHERE q.letter_id = l.id AND is_deleted = FALSE
-        )> 0
+      SELECT l.letter, COUNT(q.id) as questionCount
+      FROM letters l 
+      LEFT JOIN questions q ON l.id = q.letter_id
+      GROUP BY l.id , l.letter
+      HAVING COUNT(q.id) > 0
     `);
 
   if (letters.length === 0) {
     throw new Error("No letters with questions found");
   }
 
+  const shuffled = [...letters].sort(() => Math.random() - 0.5);
+
   const board = Array.from({ length: 25 }, (_, index) => {
-    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
     return {
       index,
-      letter: randomLetter.letter,
+      letter: shuffled[index % shuffled.length].letter,
       owner: null,
     };
   });
 
-  return board;
+  const shuffledBoard = board
+    .sort(() => Math.random() - 0.5)
+    .map((cell, index) => ({ ...cell, index }));
+
+  return shuffledBoard;
 }

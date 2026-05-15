@@ -57,8 +57,13 @@ export default function GamePlayPage() {
       );
       dispatch(gameActions.setActiveQuestion(question));
     } catch (error) {
-      dispatch(gameActions.setPhase("picking"));
-      dispatch(gameActions.setActiveCell(null));
+      try {
+        const question = await getRandomQuestionRequest(cell.letter, []);
+        dispatch(gameActions.setActiveQuestion(question));
+      } catch {
+        dispatch(gameActions.setPhase("picking"));
+        dispatch(gameActions.setActiveCell(null));
+      }
     }
   }
 
