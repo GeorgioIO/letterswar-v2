@@ -8,6 +8,7 @@ import Answer from "./Answer";
 import Feedback from "./Feedback";
 import RevealAnswerButton from "./RevealAnswerButton";
 import { checkWinner } from "../../../util/winDetection.js";
+import VoiceCaptureButtons from "./VoiceCaptureButtons.jsx";
 
 export default function QuestionOverlay() {
   const {
@@ -31,38 +32,31 @@ export default function QuestionOverlay() {
   const stealingTeam = currentTurn === "orange" ? "green" : "orange";
   const answeringTeam = isAnswering ? currentTurn : stealingTeam;
 
-  function handleCorrect() {
-    // Update board to use the updated state before dispatch
-    const updateBoard = board.map((cell) =>
-      cell.index === activeCell.index
-        ? { ...cell, owner: answeringTeam }
-        : cell,
-    );
-
+  function handleAfterCapture(updatedBoard, team) {
     dispatch(
       gameActions.captureCell({
         cellIndex: activeCell.index,
-        team: answeringTeam,
+        team: team,
       }),
     );
     dispatch(gameActions.addUsedQuestion(activeQuestion.id));
 
     // Check winner
-    const winner = checkWinner(updateBoard);
+    const winner = checkWinner(updatedBoard);
     if (winner) {
       dispatch(gameActions.setWinner(winner));
       dispatch(gameActions.setPhase("gameover"));
-      return;
+      return true;
     }
 
     // All captured - no winner
-    const allCaptured = updateBoard.every((cell) => cell.owner !== null);
+    const allCaptured = updatedBoard.every((cell) => cell.owner !== null);
     if (allCaptured) {
       // count cells
-      const orangeCount = updateBoard.filter(
+      const orangeCount = updatedBoard.filter(
         (cell) => cell.owner === "orange",
       ).length;
-      const greenCount = updateBoard.filter(
+      const greenCount = updatedBoard.filter(
         (cell) => cell.owner === "green",
       ).length;
 
@@ -75,8 +69,22 @@ export default function QuestionOverlay() {
       }
 
       dispatch(gameActions.setPhase("gameover"));
-      return;
+      return true;
     }
+
+    return false;
+  }
+
+  function handleCorrect() {
+    // Update board to use the updated state before dispatch
+    const updatedBoard = board.map((cell) =>
+      cell.index === activeCell.index
+        ? { ...cell, owner: answeringTeam }
+        : cell,
+    );
+
+    const isOver = handleAfterCapture(updatedBoard, answeringTeam);
+    if (isOver) return;
 
     setFeedback("correct");
     setTimeout(() => {
@@ -134,48 +142,12 @@ export default function QuestionOverlay() {
 
   function handleVoiceCapture(team) {
     // Update board to use the updated state before dispatch
-    const updateBoard = board.map((cell) =>
+    const updatedBoard = board.map((cell) =>
       cell.index === activeCell.index ? { ...cell, owner: team } : cell,
     );
 
-    dispatch(
-      gameActions.captureCell({
-        cellIndex: activeCell.index,
-        team,
-      }),
-    );
-    dispatch(gameActions.addUsedQuestion(activeQuestion.id));
-
-    // Check winner
-    const winner = checkWinner(updateBoard);
-    if (winner) {
-      dispatch(gameActions.setWinner(winner));
-      dispatch(gameActions.setPhase("gameover"));
-      return;
-    }
-
-    // All captured - no winner
-    const allCaptured = updateBoard.every((cell) => cell.owner !== null);
-    if (allCaptured) {
-      // count cells
-      const orangeCount = updateBoard.filter(
-        (cell) => cell.owner === "orange",
-      ).length;
-      const greenCount = updateBoard.filter(
-        (cell) => cell.owner === "green",
-      ).length;
-
-      if (orangeCount > greenCount) {
-        dispatch(gameActions.setWinner("orange"));
-      } else if (greenCount > orangeCount) {
-        dispatch(gameActions.setWinner("green"));
-      } else {
-        dispatch(gameActions.setWinner("tie"));
-      }
-
-      dispatch(gameActions.setPhase("gameover"));
-      return;
-    }
+    const isOver = handleAfterCapture(updatedBoard, team);
+    if (isOver) return;
 
     dispatch(gameActions.toggleIsAnswerRevealed(false));
     dispatch(gameActions.setActiveCell(null));
@@ -258,26 +230,10 @@ export default function QuestionOverlay() {
                     <p className="text-center font-bold text-gray-900">
                       {activeQuestion.answer}
                     </p>
-                    <div className="flex gap-8">
-                      <button
-                        className="w-14 h-14 bg-gray-200 rounded-xl"
-                        onClick={() => handleVoiceCapture("orange")}
-                      >
-                        🟧
-                      </button>
-                      <button
-                        className="w-14 h-14 bg-gray-200 rounded-xl"
-                        onClick={() => handleVoiceCapture("green")}
-                      >
-                        🟩
-                      </button>
-                      <button
-                        className="w-14 h-14 bg-gray-200 rounded-xl"
-                        onClick={handleNobodyAnswered}
-                      >
-                        ❌
-                      </button>
-                    </div>
+                    <VoiceCaptureButtons
+                      handleCapture={handleVoiceCapture}
+                      handleNobody={handleNobodyAnswered}
+                    />
                   </>
                 )}
               </>
