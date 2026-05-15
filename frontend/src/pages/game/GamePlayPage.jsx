@@ -1,15 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
 import { gameActions } from "../../store/slices/gameSlice";
 import { generateBoardRequest } from "../../api/board.api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Board from "../../components/UI/Game/Board";
 import TeamPanel from "../../components/UI/Game/TeamPanel";
 import { getRandomQuestionRequest } from "../../api/questions.api";
 import QuestionOverlay from "../../components/UI/Game/QuestionOverlay";
 import GameOverScreen from "../../components/UI/Game/GameOverScreen";
+import Loading from "../../components/UI/Loading";
+import Error from "../../components/UI/Error";
 
 export default function GamePlayPage() {
   const dispatch = useDispatch();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     return () => {
@@ -35,7 +38,7 @@ export default function GamePlayPage() {
         const board = await generateBoardRequest();
         dispatch(gameActions.setBoard(board));
       } catch (error) {
-        console.log(error);
+        setError(error.response?.data?.message || "Board failed to load");
       }
     }
     initBoard();
@@ -59,8 +62,12 @@ export default function GamePlayPage() {
     }
   }
 
+  if (error) {
+    return <Error errorMessage={error} />;
+  }
+
   if (board.length === 0) {
-    return <p>Loading board...</p>;
+    return <Loading />;
   }
 
   return (

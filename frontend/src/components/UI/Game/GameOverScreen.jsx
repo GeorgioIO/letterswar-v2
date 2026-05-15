@@ -5,10 +5,13 @@ import { Home, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ResultBadge from "./ResultBadge";
 import Scores from "./Scores";
+import { useState } from "react";
+import Error from "../Error";
 
 export default function GameOverScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const { winner, board, teams, phase, answerMode } = useSelector(
     (state) => state.game,
   );
@@ -33,13 +36,17 @@ export default function GameOverScreen() {
       );
       dispatch(gameActions.setBoard(newBoard));
     } catch (error) {
-      console.error(error);
+      setError(error.response?.data?.message || "Failed to load board!");
     }
   }
 
   function handleGoHome() {
     dispatch(gameActions.resetGame());
     navigate("/game");
+  }
+
+  if (error) {
+    return <Error errorMessage={error} />;
   }
 
   return (
