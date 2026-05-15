@@ -7,13 +7,21 @@ import LetterBadge from "./LetterBadge";
 import Answer from "./Answer";
 import Feedback from "./Feedback";
 import RevealAnswerButton from "./RevealAnswerButton";
+import { checkWinner } from "../../../util/winDetection.js";
 
 export default function QuestionOverlay() {
-  const { currentTurn, phase, activeCell, activeQuestion, answerMode, teams } =
-    useSelector((state) => state.game);
+  const {
+    currentTurn,
+    phase,
+    activeCell,
+    activeQuestion,
+    answerMode,
+    teams,
+    board,
+    isAnswerRevealed,
+  } = useSelector((state) => state.game);
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState(null);
-  const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
   const dispatch = useDispatch();
 
   if (!activeQuestion || phase === "picking" || phase === "gameover") return;
@@ -24,6 +32,13 @@ export default function QuestionOverlay() {
   const answeringTeam = isAnswering ? currentTurn : stealingTeam;
 
   function handleCorrect() {
+    // Update board to use the updated state before dispatch
+    const updateBoard = board.map((cell) =>
+      cell.index === activeCell.index
+        ? { ...cell, owner: answeringTeam }
+        : cell,
+    );
+
     dispatch(
       gameActions.captureCell({
         cellIndex: activeCell.index,
@@ -31,8 +46,39 @@ export default function QuestionOverlay() {
       }),
     );
     dispatch(gameActions.addUsedQuestion(activeQuestion.id));
-    setFeedback("correct");
 
+    // Check winner
+    const winner = checkWinner(updateBoard);
+    if (winner) {
+      dispatch(gameActions.setWinner(winner));
+      dispatch(gameActions.setPhase("gameover"));
+      return;
+    }
+
+    // All captured - no winner
+    const allCaptured = updateBoard.every((cell) => cell.owner !== null);
+    if (allCaptured) {
+      // count cells
+      const orangeCount = updateBoard.filter(
+        (cell) => cell.owner === "orange",
+      ).length;
+      const greenCount = updateBoard.filter(
+        (cell) => cell.owner === "green",
+      ).length;
+
+      if (orangeCount > greenCount) {
+        dispatch(gameActions.setWinner("orange"));
+      } else if (greenCount > orangeCount) {
+        dispatch(gameActions.setWinner("green"));
+      } else {
+        dispatch(gameActions.setWinner("tie"));
+      }
+
+      dispatch(gameActions.setPhase("gameover"));
+      return;
+    }
+
+    setFeedback("correct");
     setTimeout(() => {
       setFeedback(null);
       setAnswer("");
@@ -87,6 +133,11 @@ export default function QuestionOverlay() {
   }
 
   function handleVoiceCapture(team) {
+    // Update board to use the updated state before dispatch
+    const updateBoard = board.map((cell) =>
+      cell.index === activeCell.index ? { ...cell, owner: team } : cell,
+    );
+
     dispatch(
       gameActions.captureCell({
         cellIndex: activeCell.index,
@@ -95,7 +146,38 @@ export default function QuestionOverlay() {
     );
     dispatch(gameActions.addUsedQuestion(activeQuestion.id));
 
-    setIsAnswerRevealed(false);
+    // Check winner
+    const winner = checkWinner(updateBoard);
+    if (winner) {
+      dispatch(gameActions.setWinner(winner));
+      dispatch(gameActions.setPhase("gameover"));
+      return;
+    }
+
+    // All captured - no winner
+    const allCaptured = updateBoard.every((cell) => cell.owner !== null);
+    if (allCaptured) {
+      // count cells
+      const orangeCount = updateBoard.filter(
+        (cell) => cell.owner === "orange",
+      ).length;
+      const greenCount = updateBoard.filter(
+        (cell) => cell.owner === "green",
+      ).length;
+
+      if (orangeCount > greenCount) {
+        dispatch(gameActions.setWinner("orange"));
+      } else if (greenCount > orangeCount) {
+        dispatch(gameActions.setWinner("green"));
+      } else {
+        dispatch(gameActions.setWinner("tie"));
+      }
+
+      dispatch(gameActions.setPhase("gameover"));
+      return;
+    }
+
+    dispatch(gameActions.toggleIsAnswerRevealed(false));
     dispatch(gameActions.setActiveCell(null));
     dispatch(gameActions.setActiveQuestion(null));
     dispatch(gameActions.switchTurn());
@@ -103,7 +185,7 @@ export default function QuestionOverlay() {
   }
 
   function handleNobodyAnswered() {
-    setIsAnswerRevealed(false);
+    dispatch(gameActions.toggleIsAnswerRevealed(false));
     dispatch(gameActions.addUsedQuestion(activeQuestion.id));
     dispatch(gameActions.setActiveCell(null));
     dispatch(gameActions.setActiveQuestion(null));
@@ -112,7 +194,7 @@ export default function QuestionOverlay() {
   }
 
   function handleRevealAnswer() {
-    setIsAnswerRevealed(true);
+    dispatch(gameActions.toggleIsAnswerRevealed(true));
   }
 
   return (

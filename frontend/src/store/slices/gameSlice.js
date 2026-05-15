@@ -8,6 +8,7 @@ const initialGameSliceState = {
   board: [],
   currentTurn: "orange",
   phase: "picking",
+  isAnswerRevealed: false,
   activeCell: null,
   activeQuestion: null,
   usedQuestionIds: [],
@@ -36,6 +37,7 @@ const gameSlice = createSlice({
       state.activeQuestion = action.payload;
     },
     captureCell(state, action) {
+      console.log(action);
       state.board[action.payload.cellIndex].owner = action.payload.team;
     },
     addUsedQuestion(state, action) {
@@ -51,7 +53,10 @@ const gameSlice = createSlice({
       state.currentTurn = state.currentTurn === "orange" ? "green" : "orange";
     },
     resetGame(state) {
-      return initialGameSliceState;
+      return { ...initialGameSliceState, board: [], usedQuestionIds: [] };
+    },
+    toggleIsAnswerRevealed(state, action) {
+      state.isAnswerRevealed = action.payload;
     },
   },
 });

@@ -6,9 +6,16 @@ import Board from "../../components/UI/Game/Board";
 import TeamPanel from "../../components/UI/Game/TeamPanel";
 import { getRandomQuestionRequest } from "../../api/questions.api";
 import QuestionOverlay from "../../components/UI/Game/QuestionOverlay";
+import GameOverScreen from "../../components/UI/Game/GameOverScreen";
 
 export default function GamePlayPage() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(gameActions.resetGame());
+    };
+  }, []);
 
   const {
     board,
@@ -88,6 +95,8 @@ export default function GamePlayPage() {
       </div>
 
       <QuestionOverlay />
+
+      <GameOverScreen />
     </section>
   );
 }
