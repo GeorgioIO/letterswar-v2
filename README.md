@@ -8,6 +8,8 @@ Letters War is a web-based trivia game where two teams, Orange and Green, compet
 
 ## ℹ️ How to Play?
 
+![Board display](/readme-assets/board-display.png)
+
 - Teams take turns picking cells that contain letters.
 - A question will then be revealed, and the answer to that question.
 - question must start with the selected cell’s letter.
@@ -24,6 +26,21 @@ For this project, I used:
 - Front-end: ReactJS, TailwindCSS
 - Back-end: Node.js, Express.js
 - Database: MySQL
+
+## Admin dashboard
+
+A very important part of this project is the admin dashboard that controls the questions and admins of this project.
+
+Admins can use this project with two roles :
+
+- Super Admin : Manage questions + admins.
+- Editor : Manage questions.
+
+![Login page](/readme-assets/login.png)
+
+![Admins page](/readme-assets/questions-admins.png)
+
+![Questions page](/readme-assets/questions-dashboard.png)
 
 ## ⭐ What I Learned
 
