@@ -9,16 +9,11 @@ import QuestionOverlay from "../../components/UI/Game/QuestionOverlay";
 import GameOverScreen from "../../components/UI/Game/GameOverScreen";
 import Loading from "../../components/UI/Loading";
 import Error from "../../components/UI/Error";
+import { Navigate } from "react-router-dom";
 
 export default function GamePlayPage() {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    return () => {
-      dispatch(gameActions.resetGame());
-    };
-  }, []);
 
   const {
     board,
@@ -31,6 +26,16 @@ export default function GamePlayPage() {
     winner,
     answerMode,
   } = useSelector((state) => state.game);
+
+  if (teams.orange.name === "" && teams.green.name === "") {
+    return <Navigate to="/game/setup" />;
+  }
+
+  useEffect(() => {
+    return () => {
+      dispatch(gameActions.resetGame());
+    };
+  }, []);
 
   useEffect(() => {
     async function initBoard() {
