@@ -36,8 +36,8 @@ export default function Timer({ duration, onTimeUp, paused }) {
       <p className="text-3xl font-black text-gray-900">{timeLeft}</p>
       <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
         <div
-          className={`h-full rounded-full transition-all duration-1000 ${barColor}`}
-          style={{ width: `${percentage}%` }}
+          className={`h-full rounded-full  ${barColor}`}
+          style={{ width: `${percentage}%`, transition: "width 1s linear" }}
         />
       </div>
     </div>
