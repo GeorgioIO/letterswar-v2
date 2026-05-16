@@ -36,9 +36,16 @@ Admins can use this project with two roles :
 - Super Admin : Manage questions + admins.
 - Editor : Manage questions.
 
+### Functionalities
+
+- Add, edit and delete questions.
+- Bulk import questions.
+- Filter questions
+- Add, edit and delete admins (Exclusive for superadmin)
+
 ![Login page](/readme-assets/login.png)
 
-![Admins page](/readme-assets/questions-admins.png)
+![Admins page](/readme-assets/questions-admins-page.png)
 
 ![Questions page](/readme-assets/questions-dashboard.png)
 
