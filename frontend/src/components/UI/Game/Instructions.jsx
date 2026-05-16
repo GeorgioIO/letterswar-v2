@@ -2,15 +2,6 @@ import { Trophy, Swords, Zap, Timer } from "lucide-react";
 
 const sections = [
   {
-    icon: <Trophy size={18} className="text-orange-500" />,
-    title: "How to Win",
-    content: [
-      "🟧 Orange - connect a path from left to rgiht (or right to left)",
-      "🟩 Green - connect a path from top to bottom (or bottom to top)",
-      "Path doesn't have to be straight!",
-    ],
-  },
-  {
     icon: <Swords size={18} className="text-orange-500" />,
     title: "How to Play",
     content: [
@@ -19,6 +10,16 @@ const sections = [
       "Answer correctly to capture the cell for your team",
     ],
   },
+  {
+    icon: <Trophy size={18} className="text-orange-500" />,
+    title: "How to Win",
+    content: [
+      "🟧 Orange - connect a path from left to rgiht (or right to left)",
+      "🟩 Green - connect a path from top to bottom (or bottom to top)",
+      "Path doesn't have to be straight!",
+    ],
+  },
+
   {
     icon: <Zap size={18} className="text-orange-500" />,
     title: "Stealing",
