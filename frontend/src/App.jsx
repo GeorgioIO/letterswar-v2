@@ -17,7 +17,11 @@ function App() {
     <>
       <Toast />
       <Routes>
+        <Route path="/game" element={<GameHomePage />} />
+        <Route path="/game/setup" element={<GameSetupPage />} />
+        <Route path="/game/play" element={<GamePlayPage />} />
         <Route path="/login" element={<LoginPage />} />
+
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<HomePage />} />
@@ -32,10 +36,8 @@ function App() {
               }
             />
           </Route>
-          <Route path="/game" element={<GameHomePage />} />
-          <Route path="/game/setup" element={<GameSetupPage />} />
-          <Route path="/game/play" element={<GamePlayPage />} />
         </Route>
+
         <Route path="*" element={<Navigate to="/game" />} />
       </Routes>
     </>

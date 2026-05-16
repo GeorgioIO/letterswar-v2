@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { GridLoader } from "react-spinners";
 
 export default function ProtectedRoute({ children }) {
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoggedIn, isLoading, admin } = useAuth();
 
   if (isLoading) {
     return (
@@ -14,7 +14,7 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn && admin) {
     return <Navigate to="/login" />;
   }
 
