@@ -21,7 +21,6 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    // Fixed: Reads FRONTEND_URL from environment variables, or falls back to local dev
     origin: process.env.FRONT_END_URL || "http://localhost:5173",
     credentials: true,
   }),
