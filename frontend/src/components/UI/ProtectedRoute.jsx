@@ -5,6 +5,8 @@ import { GridLoader } from "react-spinners";
 export default function ProtectedRoute({ children }) {
   const { isLoggedIn, isLoading, admin } = useAuth();
 
+  console.log(isLoggedIn, admin);
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center flex-col gap-7">
@@ -14,7 +16,7 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  if (!isLoggedIn && admin) {
+  if (!isLoggedIn) {
     return <Navigate to="/login" />;
   }
 
