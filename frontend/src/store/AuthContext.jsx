@@ -19,7 +19,6 @@ function AuthContextProvider({ children }) {
     async function restoreSession() {
       try {
         const data = await getMeRequest();
-        console.log(data);
 
         setAdmin(data.admin);
       } catch {
