@@ -2,15 +2,56 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { Plus, ShieldCheck } from "lucide-react";
 import StatCards from "../../components/UI/Dashboard/StatsCards/StatCards";
+import { useState, useEffect } from "react";
+import { getAllStatsRequest } from "../../api/stats.api";
+import Loading from "../../components/UI/Loading";
+import Error from "../../components/UI/Error";
 
 export default function HomePage() {
   const { admin } = useAuth();
+  const [stats, setStats] = useState(null);
+  const [error, setError] = useState(null);
+  const [isFetching, setIsFetching] = useState(true);
+
+  useEffect(() => {
+    setIsFetching(true);
+    async function getStats() {
+      try {
+        const data = await getAllStatsRequest();
+        setStats(data);
+      } catch (error) {
+        setError(error.response?.data?.message || "Failed to load stats");
+      } finally {
+        setIsFetching(false);
+      }
+    }
+
+    getStats();
+  }, []);
+
+  if (isFetching) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Error errorMessage={error} />;
+  }
+
+  const cards = [
+    { title: "Total Questions", value: stats.totalQuestions },
+    { title: "Letters Below 10 QS", value: stats.lettersWithQuestionsU10 },
+    {
+      title: `Question Added in ${stats.monthLabel}`,
+      value: stats.questionsAddedThisMonth,
+    },
+    { title: "Total Admins", value: stats.totalAdmins },
+  ];
 
   return (
     <section className="h-full  grid grid-rows-[100px_150px_1fr] gap-5">
       <div className="relative bg-orange-500 p-5 pb-0 rounded-xl overflow-hidden h-22.5">
         <h1 className="relative z-10 text-white text-xl font-bold">
-          Hello {admin.username || "Admin"} 👋
+          Hello {admin?.username || "Admin"} 👋
         </h1>
 
         <svg
@@ -34,7 +75,7 @@ export default function HomePage() {
         </svg>
       </div>
 
-      <StatCards />
+      <StatCards cards={cards} />
 
       <nav className="flex justify-center items-center gap-8">
         <NavLink
@@ -45,7 +86,7 @@ export default function HomePage() {
           Add Question
         </NavLink>
 
-        {admin.role === "superadmin" && (
+        {admin?.role === "superadmin" && (
           <NavLink
             to="/dashboard/admins"
             className="inline-flex items-center gap-2 px-5 h-10.5 border-[1.5px] border-orange-500 text-orange-500 hover:bg-orange-50 text-sm font-medium rounded-xl transition-colors"

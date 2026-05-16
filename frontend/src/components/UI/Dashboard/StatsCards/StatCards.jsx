@@ -1,48 +1,6 @@
-import { useEffect, useState } from "react";
 import StatCard from "./StatCard";
-import { getAllStatsRequest } from "../../../../api/stats.api.js";
-import Error from "../../Error.jsx";
-import Loading from "../../Loading.jsx";
 
-export default function StatCards() {
-  const [stats, setStats] = useState(null);
-  const [error, setError] = useState(null);
-  const [isFetching, setIsFetching] = useState(true);
-
-  useEffect(() => {
-    setIsFetching(true);
-    async function getStats() {
-      try {
-        const data = await getAllStatsRequest();
-        setStats(data);
-      } catch (error) {
-        setError(error.response?.data?.message || "Failed to load stats");
-      } finally {
-        setIsFetching(false);
-      }
-    }
-
-    getStats();
-  }, []);
-
-  if (isFetching) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return <Error errorMessage={error} />;
-  }
-
-  const cards = [
-    { title: "Total Questions", value: stats.totalQuestions },
-    { title: "Letters Below 10 QS", value: stats.lettersWithQuestionsU10 },
-    {
-      title: `Question Added in ${stats.monthLabel}`,
-      value: stats.questionsAddedThisMonth,
-    },
-    { title: "Total Admins", value: stats.totalAdmins },
-  ];
-
+export default function StatCards({ cards }) {
   return (
     <div className="w-full grid grid-cols-4 gap-5">
       {cards.map((card, index) => {

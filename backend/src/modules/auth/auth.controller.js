@@ -42,9 +42,9 @@ export async function logoutController(req, res) {
     secure: true,
     sameSite: "none",
   });
-  res.json({ message: "Logged out successfully" });
+  return res.json({ message: "Logged out successfully" });
 }
 
 export async function meController(req, res) {
-  res.json({ admin: req.admin });
+  return res.json({ admin: req.admin });
 }
