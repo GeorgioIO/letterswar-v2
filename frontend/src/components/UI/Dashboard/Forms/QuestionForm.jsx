@@ -20,6 +20,10 @@ export default function QuestionForm({
   });
   const { admin } = useAuth();
   const { showToast } = useToast();
+  const [selectedLetter, setSelectedLetter] = useState(
+    Number(initialValues?.letter_id) || formState.enteredValues?.letterId || "",
+  );
+  console.log("Letter is : ", selectedLetter);
 
   async function submitQuestionAction(prevState, formData) {
     // Get needed data
@@ -98,6 +102,14 @@ export default function QuestionForm({
     fetchLetters();
   }, []);
 
+  useEffect(() => {
+    if (initialValues?.letter_id) {
+      setSelectedLetter(Number(initialValues.letter_id));
+    } else if (formState.enteredValues?.letterId) {
+      setSelectedLetter(Number(formState.enteredValues.letterId));
+    }
+  }, [initialValues, formState]);
+
   return (
     <form
       autoComplete="off"
@@ -110,11 +122,10 @@ export default function QuestionForm({
         name="letter_id"
         placeholder="Select A Letter"
         error={formState.errors?.letter_id}
-        value={
-          initialValues
-            ? Number(initialValues.letter_id)
-            : formState.enteredValues?.letterId
-        }
+        value={selectedLetter}
+        onChange={(e) => {
+          setSelectedLetter(e.target.value);
+        }}
         options={letters}
       />
       <FormInput
