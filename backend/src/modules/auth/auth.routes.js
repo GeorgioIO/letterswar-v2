@@ -10,7 +10,7 @@ import { authenticate } from "../../middleware/auth.js";
 const router = Router();
 
 router.post("/login", LoginLimitter, loginController);
-router.post("/logout", authenticate, logoutController);
+router.post("/logout", logoutController);
 router.get("/me", authenticate, meController);
 
 export default router;
