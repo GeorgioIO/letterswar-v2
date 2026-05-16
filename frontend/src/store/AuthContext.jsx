@@ -19,6 +19,8 @@ function AuthContextProvider({ children }) {
     async function restoreSession() {
       try {
         const data = await getMeRequest();
+        console.log(data);
+
         setAdmin(data.admin);
       } catch {
         setAdmin(null);
@@ -32,7 +34,6 @@ function AuthContextProvider({ children }) {
   async function login(loginData) {
     try {
       const data = await loginRequest(loginData);
-
       setAdmin(data.admin);
     } catch (error) {
       throw new Error(error.response?.data?.message || "Problem logging in");

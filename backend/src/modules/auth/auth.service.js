@@ -22,7 +22,7 @@ export async function login(email, password) {
   }
 
   const token = jwt.sign(
-    { id: admin.id, role: admin.role },
+    { id: admin.id, role: admin.role, username: admin.username },
     process.env.JWT_SECRET,
     { expiresIn: "8h" },
   );
