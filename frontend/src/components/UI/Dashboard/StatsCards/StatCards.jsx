@@ -3,6 +3,7 @@ import StatCard from "./StatCard";
 import { getAllStatsRequest } from "../../../../api/stats.api.js";
 import Error from "../../Error.jsx";
 import Loading from "../../Loading.jsx";
+
 export default function StatCards() {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);

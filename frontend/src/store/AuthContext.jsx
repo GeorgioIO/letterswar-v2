@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createContext } from "react";
-import { loginRequest } from "../api/auth.api";
+import { loginRequest, logoutRequest, getMeRequest } from "../api/auth.api";
 import { useEffect } from "react";
 
 export const AuthContext = createContext({
@@ -13,46 +13,45 @@ export const AuthContext = createContext({
 
 function AuthContextProvider({ children }) {
   const [admin, setAdmin] = useState(null);
-  const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedJWTToken = localStorage.getItem("jwttoken");
-    const storedAdmin = localStorage.getItem("admin");
-
-    if (storedJWTToken && storedAdmin) {
-      setAdmin(JSON.parse(storedAdmin));
-      setToken(storedJWTToken);
+    async function restoreSession() {
+      try {
+        const data = await getMeRequest();
+        setAdmin(data.admin);
+      } catch {
+        setAdmin(null);
+      } finally {
+        setIsLoading(false);
+      }
     }
-
-    setIsLoading(false);
+    restoreSession();
   }, []);
 
   async function login(loginData) {
     try {
       const data = await loginRequest(loginData);
 
-      localStorage.setItem("jwttoken", data.token);
-      localStorage.setItem("admin", JSON.stringify(data.admin));
       setAdmin(data.admin);
-      setToken(data.token);
     } catch (error) {
       throw new Error(error.response?.data?.message || "Problem logging in");
     }
   }
 
-  function logout() {
-    localStorage.removeItem("jwttoken");
-    localStorage.removeItem("admin");
-    setAdmin(null);
-    setToken(null);
+  async function logout() {
+    try {
+      await loginRequest();
+    } catch {
+    } finally {
+      setAdmin(null);
+    }
   }
 
   const ctxValue = {
     isLoggedIn: admin !== null,
     isLoading,
     admin,
-    token,
     login,
     logout,
   };
