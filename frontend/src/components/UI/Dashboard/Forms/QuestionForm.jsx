@@ -23,7 +23,6 @@ export default function QuestionForm({
   const [selectedLetter, setSelectedLetter] = useState(
     Number(initialValues?.letter_id) || formState.enteredValues?.letterId || "",
   );
-  console.log("Letter is : ", selectedLetter);
 
   async function submitQuestionAction(prevState, formData) {
     // Get needed data

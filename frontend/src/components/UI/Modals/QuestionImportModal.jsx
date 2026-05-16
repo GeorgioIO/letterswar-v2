@@ -28,7 +28,7 @@ export default function QuestionImportModal({
     setError(null);
 
     try {
-      const response = await importQuestionsRequest({
+      await importQuestionsRequest({
         questions: JSON.stringify(previewData),
       });
 
@@ -64,7 +64,7 @@ export default function QuestionImportModal({
   function parseFile(file) {
     Papa.parse(file, {
       header: true,
-      skipEmptyLines: "true",
+      skipEmptyLines: true,
       complete: (result, file) => {
         setPreviewData(result.data);
       },
