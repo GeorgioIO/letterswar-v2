@@ -23,8 +23,10 @@ export async function loginController(req, res, next) {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      // secure: true is REQUIRED if sameSite is "none".
+      // Since Render uses HTTPS by default, we can just set this to true.
+      secure: true,
+      sameSite: "none", // used this here to allow to cross between render and vercel
       maxAge: 8 * 60 * 60 * 1000,
     });
 
@@ -37,8 +39,8 @@ export async function loginController(req, res, next) {
 export async function logoutController(req, res) {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: true,
+    sameSite: "none",
   });
   res.json({ message: "Logged out successfully" });
 }
