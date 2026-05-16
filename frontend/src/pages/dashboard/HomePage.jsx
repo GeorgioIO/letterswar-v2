@@ -10,7 +10,7 @@ export default function HomePage() {
     <section className="h-full  grid grid-rows-[100px_150px_1fr] gap-5">
       <div className="relative bg-orange-500 p-5 pb-0 rounded-xl overflow-hidden h-22.5">
         <h1 className="relative z-10 text-white text-xl font-bold">
-          Hello {admin.username} 👋
+          Hello {admin.username || "Admin"} 👋
         </h1>
 
         <svg
