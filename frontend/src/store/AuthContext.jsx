@@ -41,7 +41,7 @@ function AuthContextProvider({ children }) {
 
   async function logout() {
     try {
-      await loginRequest();
+      await logoutRequest();
     } catch {
     } finally {
       setAdmin(null);
