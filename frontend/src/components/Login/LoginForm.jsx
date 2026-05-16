@@ -40,7 +40,7 @@ export default function LoginForm() {
     }
   }
 
-  const [formState, formAction] = useActionState(loginAction, {
+  const [formState, formAction, isLoading] = useActionState(loginAction, {
     errors: null,
   });
 
@@ -85,7 +85,7 @@ export default function LoginForm() {
         error={formState.errors?.password}
       />
       <button className="bg-black w-37.5 self-center text-white py-2 rounded-xl cursor-pointer">
-        Login
+        {isLoading ? "Logging in..." : "Login"}
       </button>
     </form>
   );
