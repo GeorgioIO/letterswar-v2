@@ -19,6 +19,7 @@ import {
   restoreQuestionRequest,
 } from "../../api/questions.api";
 import RestoreModal from "../../components/UI/Modals/RestoreModal";
+import QuestionImportModal from "../../components/UI/Modals/QuestionImportModal";
 
 const tableColumns = ["Letter", "Question", "Answer", "Created By", "Action"];
 
@@ -71,6 +72,7 @@ export default function QuestionPage() {
   const addModal = useModal();
   const editModal = useModal();
   const restoreModal = useModal();
+  const importModal = useModal();
 
   // Functions
   function renderQuestionRow(row) {
@@ -100,6 +102,7 @@ export default function QuestionPage() {
         limit={limit}
         openFiltering={filterModal.open}
         openAdd={addModal.open}
+        openImport={importModal.open}
         onLimitChange={(val) => handleLimitChange(val)}
         onDeletedChange={toggleShowDeleted}
       />
@@ -172,6 +175,11 @@ export default function QuestionPage() {
         letterSelected={letterSelected}
         handleLetterChange={setLetterSelected}
         resetPage={resetPage}
+      />
+      <QuestionImportModal
+        isOpen={importModal.isOpen}
+        handleClose={importModal.close}
+        handleRefresh={handleRefresh}
       />
     </section>
   );

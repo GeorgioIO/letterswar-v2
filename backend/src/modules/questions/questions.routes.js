@@ -6,6 +6,7 @@ const router = Router();
 
 router.get("/random", questionsControllers.getRandomOne);
 router.use(authenticate);
+router.post("/import", questionsControllers.importQuestions);
 router.get("/", questionsControllers.getAll);
 router.get("/:id", questionsControllers.getOne);
 router.post("/", questionsControllers.create);

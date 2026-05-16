@@ -1,4 +1,4 @@
-import { Funnel, Plus } from "lucide-react";
+import { Funnel, Plus, Import } from "lucide-react";
 import OutlineButton from "./Buttons/OutlineButton";
 import Button from "./Buttons/Button";
 
@@ -7,6 +7,7 @@ export default function PageHeader({
   addText,
   openFiltering,
   openAdd,
+  openImport,
   limit,
   onLimitChange,
   onDeletedChange,
@@ -51,6 +52,12 @@ export default function PageHeader({
             </label>
           </div>
         )}
+        {openImport && (
+          <OutlineButton onClick={openImport}>
+            <Import size={15} /> Import
+          </OutlineButton>
+        )}
+
         {openFiltering && (
           <OutlineButton onClick={openFiltering}>
             <Funnel size={15} /> Filter

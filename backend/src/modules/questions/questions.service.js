@@ -98,6 +98,22 @@ export async function getRandomQuestion(letter, excludeIds) {
   return rows[0] || null;
 }
 
+export async function bulkImport(validatedQuestions, admin_id) {
+  const bulkData = validatedQuestions.map((question) => [
+    question.letter_id,
+    question.question_text,
+    question.answer,
+    admin_id,
+  ]);
+
+  const [result] = await pool.query(
+    `INSERT INTO questions (letter_id , question_text , answer , created_by) VALUES ?`,
+    [bulkData],
+  );
+
+  return result.affectedRows;
+}
+
 export async function createQuestion(
   letter_id,
   question_text,

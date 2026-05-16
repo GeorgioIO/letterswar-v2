@@ -26,7 +26,7 @@ export default function CustomTable({
   }
 
   if (error) {
-    return <Error errorMessage={error} />;
+    return <Error errorMessage={error} className="min-h-screen" />;
   }
 
   if (data.length === 0) {

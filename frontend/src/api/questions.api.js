@@ -36,6 +36,12 @@ export async function getQuestionByIdRequest(id) {
   return response.data;
 }
 
+// TODO import question
+export async function importQuestionsRequest(data) {
+  const response = await api.post("/questions/import", data);
+  return response.data;
+}
+
 // TODO Create question
 export async function createQuestionRequest(data) {
   const response = await api.post("/questions", data);

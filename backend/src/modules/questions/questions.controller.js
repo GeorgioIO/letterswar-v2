@@ -3,6 +3,7 @@ import {
   isNotEmpty,
   isAnswerStartsWithLetter,
 } from "../../utils/validation.js";
+import { letterToNumber, numberToLetter } from "../../utils/helpers.js";
 
 export async function getAll(req, res, next) {
   const page = parseInt(req.query.page) || 1;
@@ -18,7 +19,6 @@ export async function getAll(req, res, next) {
       showDeleted,
     );
 
-    console.log(questions);
     res.json(questions);
   } catch (error) {
     next(error);
@@ -58,6 +58,58 @@ export async function getRandomOne(req, res, next) {
     }
 
     res.json(question);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function importQuestions(req, res, next) {
+  const questions = JSON.parse(req.body.questions);
+  const admin_id = req.admin.id;
+
+  // Validation
+  if (!Array.isArray(questions) || questions.length === 0) {
+    return res.status(400).json({ message: "Invalid or empty data provided" });
+  }
+
+  const validatedQuestions = [];
+
+  for (let i = 0; i < questions.length; i++) {
+    const question = questions[i];
+    const letter_id = letterToNumber(question.letter);
+
+    if (
+      !isNotEmpty(question.letter) ||
+      !isNotEmpty(question.question_text) ||
+      !isNotEmpty(question.answer)
+    ) {
+      return res.status(400).json({
+        message: `Validation failed at row ${i + 1}: Missing required fields.`,
+      });
+    }
+
+    if (!isAnswerStartsWithLetter(question.answer, question.letter)) {
+      return res.status(400).json({
+        message: `Validation failed at row  ${i + 1}: Answer must start with the given letter (${question.answer} - ${question.letter})`,
+      });
+    }
+
+    validatedQuestions.push({
+      letter_id: letter_id,
+      question_text: question.question_text,
+      answer: question.answer,
+    });
+  }
+
+  try {
+    const affectedRow = await questionServices.bulkImport(
+      validatedQuestions,
+      admin_id,
+    );
+    res.status(201).json({
+      message: "Bulk import successfull",
+      count: affectedRow || validatedQuestions.length,
+    });
   } catch (error) {
     next(error);
   }
