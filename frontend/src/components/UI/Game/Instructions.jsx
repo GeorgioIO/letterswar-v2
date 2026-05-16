@@ -1,4 +1,11 @@
-import { Trophy, Swords, Zap, Timer } from "lucide-react";
+import {
+  Trophy,
+  Swords,
+  Zap,
+  Timer,
+  AudioLines,
+  TextCursor,
+} from "lucide-react";
 
 const sections = [
   {
@@ -11,10 +18,30 @@ const sections = [
     ],
   },
   {
+    icon: <TextCursor size={18} className="text-orange-500" />,
+    title: "Input Mode",
+    content: [
+      "Once a cell is picked",
+      "The answering team type an answer and click go if correct = cell captured",
+      "The stealing team has a chance to steal (if answering team failed)",
+    ],
+  },
+  {
+    icon: <AudioLines size={18} className="text-orange-500" />,
+    title: "Answer Mode",
+    content: [
+      "Once a cell is picked",
+      "The answering team say an answer and set it",
+      "The stealing team then say an answer and set it",
+      "Only after both team set their answers question is revealed",
+      "If answering team time passes and no answer is set , stealing team has 20 seconds to say an answer",
+    ],
+  },
+  {
     icon: <Trophy size={18} className="text-orange-500" />,
     title: "How to Win",
     content: [
-      "🟧 Orange - connect a path from left to rgiht (or right to left)",
+      "🟧 Orange - connect a path from left to right (or right to left)",
       "🟩 Green - connect a path from top to bottom (or bottom to top)",
       "Path doesn't have to be straight!",
     ],

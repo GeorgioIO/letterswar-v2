@@ -55,6 +55,9 @@ export default function GameHomePage() {
           >
             <Info size={15} className="text-gray-400" /> How to play
           </button>
+          <p className="text-xs text-gray-400 font-black">
+            It's highly advised to read instructions before playing
+          </p>
         </div>
 
         <div className="flex items-center gap-5 md:gap-8 pt-2">
