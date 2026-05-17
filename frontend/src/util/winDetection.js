@@ -9,9 +9,6 @@ export function getNeighbors(index) {
   if (col > 0) neighbors.push(index - 1);
   if (col < 4) neighbors.push(index + 1);
 
-  if (row > 0 && col < 4) neighbors.push(index - 4);
-  if (row < 4 && col > 0) neighbors.push(index + 4);
-
   return neighbors;
 }
 

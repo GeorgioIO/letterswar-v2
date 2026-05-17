@@ -13,6 +13,7 @@ const initialGameSliceState = {
   activeQuestion: null,
   usedQuestionIds: [],
   winner: null,
+  winBy: "", // path , captures
   answerMode: "text",
 };
 
@@ -45,6 +46,9 @@ const gameSlice = createSlice({
     },
     setWinner(state, action) {
       state.winner = action.payload;
+    },
+    setWinBy(state, action) {
+      state.winBy = action.payload;
     },
     setAnswerMode(state, action) {
       state.answerMode = action.payload;

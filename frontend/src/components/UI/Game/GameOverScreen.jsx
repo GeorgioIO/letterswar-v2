@@ -12,7 +12,7 @@ export default function GameOverScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const { winner, board, teams, phase, answerMode } = useSelector(
+  const { winner, board, teams, phase, answerMode, winBy } = useSelector(
     (state) => state.game,
   );
 
@@ -69,8 +69,12 @@ export default function GameOverScreen() {
             </h2>
             <p className="text-gray-400 text-sm">
               {winner === "orange"
-                ? "Connected left to right!"
-                : "Connected top to bottom!"}
+                ? winBy === "path"
+                  ? "Connected left to right!"
+                  : "Orange captured more cells"
+                : winBy === "path"
+                  ? "Connected top to bottom!"
+                  : "Green captured more cells"}
             </p>
           </>
         )}

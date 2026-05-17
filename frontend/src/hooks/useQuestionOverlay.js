@@ -13,7 +13,9 @@ export function useQuestionOverlay() {
     teams,
     board,
     isAnswerRevealed,
+    winBy,
   } = useSelector((state) => state.game);
+
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState(null);
   const dispatch = useDispatch();
@@ -36,6 +38,7 @@ export function useQuestionOverlay() {
     // Check winner
     const winner = checkWinner(updatedBoard);
     if (winner) {
+      dispatch(gameActions.setWinBy("path"));
       dispatch(gameActions.setWinner(winner));
       dispatch(gameActions.setPhase("gameover"));
       return true;
@@ -53,8 +56,10 @@ export function useQuestionOverlay() {
       ).length;
 
       if (orangeCount > greenCount) {
+        dispatch(gameActions.setWinBy("captures"));
         dispatch(gameActions.setWinner("orange"));
       } else if (greenCount > orangeCount) {
+        dispatch(gameActions.setWinBy("captures"));
         dispatch(gameActions.setWinner("green"));
       } else {
         dispatch(gameActions.setWinner("tie"));
