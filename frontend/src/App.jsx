@@ -4,19 +4,27 @@ import {
   redirect,
   RouterProvider,
 } from "react-router-dom";
-import LoginPage from "./pages/auth/LoginPage.jsx";
-import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
-import SuperAdminRoute from "./components/UI/SuperAdminRoute.jsx";
-import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
-import HomePage from "./pages/dashboard/HomePage.jsx";
-import QuestionPage from "./pages/dashboard/QuestionsPage.jsx";
-import LettersPage from "./pages/dashboard/LettersPage.jsx";
+import { lazy, Suspense } from "react";
 import Toast from "./components/UI/Toast.jsx";
-import AdminsPage from "./pages/dashboard/AdminsPage.jsx";
+
+// Game related pages
 import GameHomePage from "./pages/game/GameHomePage.jsx";
 import GamePlayPage from "./pages/game/GamePlayPage.jsx";
 import GameSetupPage from "./pages/game/GameSetupPage.jsx";
 
+// Admin related pages
+// import LoginPage from "./pages/auth/LoginPage.jsx";
+import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
+import SuperAdminRoute from "./components/UI/SuperAdminRoute.jsx";
+
+const LoginPage = lazy(() => import("./pages/auth/LoginPage.jsx"));
+const DashboardLayout = lazy(
+  () => import("./pages/dashboard/DashboardLayout.jsx"),
+);
+const HomePage = lazy(() => import("./pages/dashboard/HomePage.jsx"));
+const QuestionPage = lazy(() => import("./pages/dashboard/QuestionsPage.jsx"));
+const LettersPage = lazy(() => import("./pages/dashboard/LettersPage.jsx"));
+const AdminsPage = lazy(() => import("./pages/dashboard/AdminsPage.jsx"));
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,13 +33,24 @@ const router = createBrowserRouter([
   { path: "/game", element: <GameHomePage /> },
   { path: "/game/setup", element: <GameSetupPage /> },
   { path: "/game/play", element: <GamePlayPage /> },
-  { path: "/login", element: <LoginPage /> },
+  {
+    path: "/login",
+    element: (
+      <Suspense fallback={<p>Loading...</p>}>
+        <LoginPage />
+      </Suspense>
+    ),
+  },
   {
     element: <ProtectedRoute />,
     children: [
       {
         path: "/dashboard",
-        element: <DashboardLayout />,
+        element: (
+          <Suspense>
+            <DashboardLayout />
+          </Suspense>
+        ),
         children: [
           { index: true, element: <HomePage /> },
           { path: "questions", element: <QuestionPage /> },
