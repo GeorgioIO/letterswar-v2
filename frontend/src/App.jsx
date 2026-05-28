@@ -1,4 +1,9 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import {
+  Navigate,
+  createBrowserRouter,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
 import LoginPage from "./pages/auth/LoginPage.jsx";
 import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
 import SuperAdminRoute from "./components/UI/SuperAdminRoute.jsx";
@@ -12,34 +17,48 @@ import GameHomePage from "./pages/game/GameHomePage.jsx";
 import GamePlayPage from "./pages/game/GamePlayPage.jsx";
 import GameSetupPage from "./pages/game/GameSetupPage.jsx";
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    loader: () => redirect("/game"),
+  },
+  { path: "/game", element: <GameHomePage /> },
+  { path: "/game/setup", element: <GameSetupPage /> },
+  { path: "/game/play", element: <GamePlayPage /> },
+  { path: "/login", element: <LoginPage /> },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: "questions", element: <QuestionPage /> },
+          { path: "letters", element: <LettersPage /> },
+          {
+            path: "admins",
+            element: (
+              <SuperAdminRoute>
+                <AdminsPage />
+              </SuperAdminRoute>
+            ),
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/game" replace />,
+  },
+]);
+
 function App() {
   return (
     <>
       <Toast />
-      <Routes>
-        <Route path="/game" element={<GameHomePage />} />
-        <Route path="/game/setup" element={<GameSetupPage />} />
-        <Route path="/game/play" element={<GamePlayPage />} />
-        <Route path="/login" element={<LoginPage />} />
-
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<HomePage />} />
-            <Route path="questions" element={<QuestionPage />} />
-            <Route path="letters" element={<LettersPage />} />
-            <Route
-              path="admins"
-              element={
-                <SuperAdminRoute>
-                  <AdminsPage />
-                </SuperAdminRoute>
-              }
-            />
-          </Route>
-        </Route>
-
-        <Route path="*" element={<Navigate to="/game" />} />
-      </Routes>
+      <RouterProvider router={router} />
     </>
   );
 }

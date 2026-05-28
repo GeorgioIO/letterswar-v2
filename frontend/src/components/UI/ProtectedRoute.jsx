@@ -2,7 +2,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { Navigate, Outlet } from "react-router-dom";
 import { GridLoader } from "react-spinners";
 
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute() {
   const { isLoggedIn, isLoading, admin } = useAuth();
 
   console.log(isLoggedIn, admin);

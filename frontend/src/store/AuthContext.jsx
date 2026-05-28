@@ -27,6 +27,7 @@ function AuthContextProvider({ children }) {
         setIsLoading(false);
       }
     }
+
     restoreSession();
   }, []);
 
