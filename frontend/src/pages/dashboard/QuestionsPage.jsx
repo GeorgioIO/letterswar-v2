@@ -21,6 +21,7 @@ import {
   restoreQuestionRequest,
   createQuestionRequest,
   updateQuestionRequest,
+  importQuestionsRequest,
 } from "../../api/questions.api";
 import RestoreModal from "../../components/UI/Modals/RestoreModal";
 import QuestionImportModal from "../../components/UI/Modals/QuestionImportModal";
@@ -71,6 +72,37 @@ export default function QuestionPage() {
       editModal.close();
       showToast("Question is updated successfully", "success");
       queryClient.invalidateQueries({ queryKey: ["questions"] });
+    },
+  });
+
+  const { mutate: deleteQuestionMutation } = useMutation({
+    mutationFn: (id) => deleteQuestionRequest(id),
+    onSuccess: () => {
+      deleteModal.close();
+      showToast("Question is Deleted!", "success");
+
+      if (data?.questions?.length === 1 && page > 1) {
+        setPage((prev) => prev - 1);
+      }
+
+      queryClient.invalidateQueries({ queryKey: ["questions"] });
+    },
+    onError: () => {
+      deleteModal.close();
+      showToast("Failed to delete question", "fail");
+    },
+  });
+
+  const { mutate: restoreQuestionMutation } = useMutation({
+    mutationFn: (id) => restoreQuestionRequest(id),
+    onSuccess: () => {
+      restoreModal.close();
+      showToast("Question is Restored!", "success");
+      queryClient.invalidateQueries({ queryKey: ["questions"] });
+    },
+    onError: () => {
+      restoreModal.close();
+      showToast("Failed to restore question", "fail");
     },
   });
 
@@ -155,33 +187,15 @@ export default function QuestionPage() {
         isOpen={restoreModal.isOpen}
         handleClose={restoreModal.close}
         title="Restore Question"
-        successMessage="Question restored successfully"
-        failMessage="Problem restoring question"
         message="You're going to restore this question. Are you sure?"
-        restoreRequest={() => restoreQuestionRequest(restoreModal.data?.id)}
-        onSuccess={() => {
-          handleRefresh();
-
-          if (data.length === 1 && page > 1) {
-            setPage((prev) => prev - 1);
-          }
-        }}
+        onSubmit={() => restoreQuestionMutation(restoreModal.data?.id)}
       />
       <DeleteModal
         isOpen={deleteModal.isOpen}
         handleClose={deleteModal.close}
         title="Delete Question"
-        successMessage="Question deleted successfully"
-        failMessage="Problem deleting question"
         message="You're going to delete this question. Are you sure?"
-        deleteRequest={() => deleteQuestionRequest(deleteModal.data?.id)}
-        onSuccess={() => {
-          handleRefresh();
-
-          if (data.length === 1 && page > 1) {
-            setPage((prev) => prev - 1);
-          }
-        }}
+        onSubmit={() => deleteQuestionMutation(deleteModal.data?.id)}
       />
       <FilterLetterModal
         isOpen={filterModal.isOpen}

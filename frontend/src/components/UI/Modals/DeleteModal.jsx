@@ -1,4 +1,3 @@
-import { useToast } from "../../../hooks/useToast";
 import Modal from "./Modal";
 import { CircleAlert } from "lucide-react";
 
@@ -6,24 +5,9 @@ export default function DeleteModal({
   isOpen,
   handleClose,
   title,
-  successMessage,
-  failMessage,
   message,
-  deleteRequest,
-  onSuccess,
+  onSubmit,
 }) {
-  const { showToast } = useToast();
-  async function handleDelete() {
-    try {
-      await deleteRequest();
-      onSuccess();
-      handleClose();
-      showToast(successMessage, "success");
-    } catch (error) {
-      showToast(error.response?.data?.message || failMessage, "fail");
-    }
-  }
-
   return (
     <Modal open={isOpen} handleClose={handleClose}>
       <div className="flex flex-col items-center text-center gap-4 p-2">
@@ -44,7 +28,7 @@ export default function DeleteModal({
             No, Keep it
           </button>
           <button
-            onClick={handleDelete}
+            onClick={onSubmit}
             className="cursor-pointer flex-1 h-10 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-colors"
           >
             Yes, Delete it

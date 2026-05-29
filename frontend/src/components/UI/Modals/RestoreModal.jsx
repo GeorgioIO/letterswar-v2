@@ -1,4 +1,3 @@
-import { useToast } from "../../../hooks/useToast";
 import Modal from "./Modal";
 import { Download } from "lucide-react";
 
@@ -6,24 +5,21 @@ export default function RestoreModal({
   isOpen,
   handleClose,
   title,
-  successMessage,
-  failMessage,
   message,
-  restoreRequest,
-  onSuccess,
+  onSubmit,
 }) {
-  const { showToast } = useToast();
+  // const { showToast } = useToast();
 
-  async function handleRestore() {
-    try {
-      await restoreRequest();
-      onSuccess();
-      handleClose();
-      showToast(successMessage, "success");
-    } catch (error) {
-      showToast(error.response?.data?.message || failMessage, "error");
-    }
-  }
+  // async function handleRestore() {
+  //   try {
+  //     await restoreRequest();
+  //     onSuccess();
+  //     handleClose();
+  //     showToast(successMessage, "success");
+  //   } catch (error) {
+  //     showToast(error.response?.data?.message || failMessage, "error");
+  //   }
+  // }
 
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -45,7 +41,7 @@ export default function RestoreModal({
             No, Keep it
           </button>
           <button
-            onClick={handleRestore}
+            onClick={onSubmit}
             className="cursor-pointer flex-1 h-10 rounded-lg bg-green-500 hover:bg-green-600 text-white text-sm font-medium transition-colors"
           >
             Yes, Restore it
