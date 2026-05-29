@@ -1,33 +1,29 @@
-import { useState, useEffect } from "react";
 import PageHeader from "../../components/UI/Dashboard/PageHeader";
 import getAllLettersRequest from "../../api/letters.api";
 import LettersGrid from "../../components/UI/Dashboard/LettersGrid/LettersGrid";
+import { useQuery } from "@tanstack/react-query";
 
 export default function LettersPage() {
-  const [letters, setLetters] = useState([]);
-  const [error, setError] = useState(null);
-  const [isFetching, setIsFetching] = useState(true);
-
-  useEffect(() => {
-    setIsFetching(true);
-    async function fetchLetters() {
-      try {
-        const letters = await getAllLettersRequest();
-        setLetters(letters);
-      } catch (error) {
-        setError(error.response?.data?.message || "Problem fetching letters");
-      } finally {
-        setIsFetching(false);
-      }
-    }
-
-    fetchLetters();
-  }, []);
+  const {
+    data: letters,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["letters"],
+    queryFn: getAllLettersRequest,
+    staleTime: 10000,
+  });
 
   return (
     <section className="flex flex-col gap-5">
       <PageHeader sectionTitle="Letters" />
-      <LettersGrid letters={letters} isFetching={isFetching} error={error} />
+      <LettersGrid
+        letters={letters}
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+      />
     </section>
   );
 }

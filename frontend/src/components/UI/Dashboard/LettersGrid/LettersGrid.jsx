@@ -2,13 +2,15 @@ import Loading from "../../Loading";
 import Error from "../../Error";
 import LetterCell from "./LetterCell";
 
-export default function LettersGrid({ letters, isFetching, error }) {
-  if (isFetching) {
+export default function LettersGrid({ letters, isLoading, isError, error }) {
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (error) {
-    return <Error errorMessage={error} />;
+  if (isError) {
+    return (
+      <Error errorMessage={error?.message || "Failed to load letters..."} />
+    );
   }
 
   return (
