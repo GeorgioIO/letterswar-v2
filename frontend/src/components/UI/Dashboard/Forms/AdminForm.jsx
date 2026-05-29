@@ -16,16 +16,11 @@ const adminRoles = [
   { value: "editor", label: "Editor" },
 ];
 
-export default function AdminForm({
-  handleRefresh,
-  successMessage,
-  failMessage,
-}) {
+export default function AdminForm({ onSubmit }) {
   const [formState, formAction] = useActionState(submitAdminAction, {
     errors: null,
   });
   const [showPass, setShowPass] = useState(false);
-  const { showToast } = useToast();
 
   async function submitAdminAction(prevState, formData) {
     // Get needed data
@@ -62,18 +57,12 @@ export default function AdminForm({
     }
 
     try {
-      await createAdminRequest({ username, email, password, role });
-      handleRefresh();
-      showToast(successMessage, "success");
+      onSubmit({ username, email, password, role });
       return { errors: null };
     } catch (error) {
-      console.log("full error:", error);
-      console.log("response:", error.response);
-      console.log("message:", error.response?.data?.message);
-      showToast(error.response?.data?.message || failMessage, "error");
       return {
         errors: {
-          general: error.response?.data?.message || failMessage,
+          general: error.response?.data?.message || "Fail to add admin",
           errors,
         },
         enteredValues: { username, email, password, role },

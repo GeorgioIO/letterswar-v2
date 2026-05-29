@@ -1,39 +1,52 @@
 import CustomTable from "../../components/UI/Dashboard/CustomTable/CustomTable";
 import PageHeader from "../../components/UI/Dashboard/PageHeader";
-import { getAllAdminsRequest, deleteAdminRequest } from "../../api/admins.api";
-import { useState, useEffect } from "react";
+import {
+  getAllAdminsRequest,
+  deleteAdminRequest,
+  createAdminRequest,
+} from "../../api/admins.api";
 import { Shield, ShieldCheck } from "lucide-react";
 import AddAdminModal from "../../components/UI/Modals/AddAdminModal";
 import { useModal } from "../../hooks/useModal";
-import { useRefresh } from "../../hooks/useRefresh";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import DeleteModal from "../../components/UI/Modals/DeleteModal";
-
+import { queryClient } from "../../util/tanstack";
+import { useToast } from "../../hooks/useToast";
 const tableColumns = ["Username", "Email", "Role", "Created At", "Action"];
 
 export default function AdminsPage() {
-  const [admins, setAdmins] = useState([]);
-  const [error, setError] = useState(null);
-  const [isFetching, setIsFetching] = useState(true);
-
   const addModal = useModal();
   const deleteModal = useModal();
-  const { refreshKey, handleRefresh } = useRefresh();
+  const { showToast } = useToast();
 
-  useEffect(() => {
-    setIsFetching(true);
-    async function fetchAdmins() {
-      try {
-        const data = await getAllAdminsRequest();
-        setAdmins(data);
-      } catch (error) {
-        setError(error.response?.data?.message || "Problem fetching admins");
-      } finally {
-        setIsFetching(false);
-      }
-    }
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["admins"],
+    queryFn: getAllAdminsRequest,
+  });
 
-    fetchAdmins();
-  }, [refreshKey]);
+  const { mutate: addAdminMutation } = useMutation({
+    mutationFn: createAdminRequest,
+    onSuccess: () => {
+      addModal.close();
+      queryClient.invalidateQueries({ queryKey: ["admins"] });
+      showToast("Admin is added successfully!", "success");
+    },
+    onError: () => {
+      showToast("Failed to add admin", "fail");
+    },
+  });
+
+  const { mutate: deleteAdminMutation, isPending } = useMutation({
+    mutationFn: deleteAdminRequest,
+    onSuccess: () => {
+      deleteModal.close();
+      queryClient.invalidateQueries({ queryKey: ["admins"] });
+      showToast("Admin is deleted successfully!", "success");
+    },
+    onError: () => {
+      showToast("Failed to delete admin", "fail");
+    },
+  });
 
   function renderAdminRow(row) {
     const formattedDate = new Date(row.created_at).toLocaleDateString("en-US", {
@@ -73,9 +86,10 @@ export default function AdminsPage() {
         openAdd={addModal.open}
       />
       <CustomTable
-        data={admins}
+        data={data && data}
         columns={tableColumns}
-        isFetching={isFetching}
+        isLoading={isLoading}
+        isError={isError}
         error={error}
         renderRow={renderAdminRow}
         noDataTitle="No Admins Available"
@@ -85,19 +99,15 @@ export default function AdminsPage() {
       <AddAdminModal
         isOpen={addModal.isOpen}
         handleClose={addModal.close}
-        successMessage="Admin added successfully"
-        failMessage="Failed to add admin"
-        handleRefresh={handleRefresh}
+        onSubmit={addAdminMutation}
       />
       <DeleteModal
         isOpen={deleteModal.isOpen}
+        isPending={isPending}
         handleClose={deleteModal.close}
         title="Delete Admin"
-        successMessage="Admin deleted successfully"
-        failMessage="Problem deleting admin"
-        message="You're going to delete this admin. Are you sure?"
-        deleteRequest={() => deleteAdminRequest(deleteModal.data?.id)}
-        onSuccess={handleRefresh}
+        message="You're going to delete this admin. Are you sure (This action is unrestorable)?"
+        onSubmit={() => deleteAdminMutation(deleteModal.data?.id)}
       />
     </section>
   );

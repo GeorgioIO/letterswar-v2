@@ -3,6 +3,7 @@ import { CircleAlert } from "lucide-react";
 
 export default function DeleteModal({
   isOpen,
+  isPending,
   handleClose,
   title,
   message,
@@ -21,18 +22,23 @@ export default function DeleteModal({
         </div>
 
         <div className="flex gap-3 w-full mt-1">
-          <button
-            onClick={handleClose}
-            className="cursor-pointer flex-1 h-10 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-          >
-            No, Keep it
-          </button>
-          <button
-            onClick={onSubmit}
-            className="cursor-pointer flex-1 h-10 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-colors"
-          >
-            Yes, Delete it
-          </button>
+          {isPending && <p className="text-center">Deleting...</p>}
+          {!isPending && (
+            <>
+              <button
+                onClick={handleClose}
+                className="cursor-pointer flex-1 h-10 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                No, Keep it
+              </button>
+              <button
+                onClick={onSubmit}
+                className="cursor-pointer flex-1 h-10 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-colors"
+              >
+                Yes, Delete it
+              </button>
+            </>
+          )}
         </div>
       </div>
     </Modal>
