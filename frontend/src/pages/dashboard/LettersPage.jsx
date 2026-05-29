@@ -11,8 +11,7 @@ export default function LettersPage() {
     error,
   } = useQuery({
     queryKey: ["letters"],
-    queryFn: getAllLettersRequest,
-    staleTime: 10000,
+    queryFn: ({ signal }) => getAllLettersRequest(signal),
   });
 
   return (

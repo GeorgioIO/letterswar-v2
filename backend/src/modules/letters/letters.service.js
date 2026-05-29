@@ -8,7 +8,8 @@ export async function getAllLetters() {
             COUNT(q.id) AS questions_count
         FROM letters l
         LEFT JOIN questions q ON l.id = q.letter_id AND q.is_deleted = FALSE
-        GROUP BY l.id , l.letter;        
+        GROUP BY l.id , l.letter
+        ORDER BY l.letter;        
         `);
 
   return rows;
