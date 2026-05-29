@@ -2,6 +2,7 @@ import api from "./axios";
 
 // TODO Get questions
 export async function getAllQuestionsRequest(
+  signal,
   page = 1,
   limit = 10,
   letter = null,
@@ -10,13 +11,14 @@ export async function getAllQuestionsRequest(
   const params = { page, limit };
 
   if (letter) params.letter = letter;
+
   if (showDeleted) {
     params.showDeleted = 1;
   } else {
     params.showDeleted = 0;
   }
 
-  const response = await api.get(`/questions`, { params });
+  const response = await api.get(`/questions`, { params, signal });
   return response.data;
 }
 
@@ -49,9 +51,8 @@ export async function createQuestionRequest(data) {
 }
 
 // TODO Update question
-export async function updateQuestionRequest(id, data) {
-  console.log("id in function: ", id);
-  const response = await api.put(`/questions/${id}`, data);
+export async function updateQuestionRequest(data) {
+  const response = await api.put(`/questions/${data.id}`, data);
   return response.data;
 }
 

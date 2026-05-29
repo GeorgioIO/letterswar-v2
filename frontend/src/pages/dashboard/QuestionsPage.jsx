@@ -11,22 +11,24 @@ import { useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { useRefresh } from "../../hooks/useRefresh";
 import { useModal } from "../../hooks/useModal";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { queryClient } from "../../util/tanstack";
 
 // Requests functions
 import {
   getAllQuestionsRequest,
   deleteQuestionRequest,
   restoreQuestionRequest,
+  createQuestionRequest,
+  updateQuestionRequest,
 } from "../../api/questions.api";
 import RestoreModal from "../../components/UI/Modals/RestoreModal";
 import QuestionImportModal from "../../components/UI/Modals/QuestionImportModal";
+import { useToast } from "../../hooks/useToast";
 
 const tableColumns = ["Letter", "Question", "Answer", "Created By", "Action"];
 
 export default function QuestionPage() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isFetching, setIsFetching] = useState(true);
   const [letterSelected, setLetterSelected] = useState(null);
   const [showDeleted, setShowDeleted] = useState(false);
 
@@ -41,30 +43,42 @@ export default function QuestionPage() {
     resetPage,
   } = usePagination();
 
-  // Get data
-  useEffect(() => {
-    setIsFetching(true);
-    async function getQuestions() {
-      try {
-        const response = await getAllQuestionsRequest(
-          page,
-          limit,
-          letterSelected,
-          showDeleted,
-        );
-        setData(response.questions);
-        setTotalPages(response.totalPages);
-      } catch (error) {
-        setError(
-          error.response?.data?.message || "Problem in fetching questions...",
-        );
-      } finally {
-        setIsFetching(false);
-      }
-    }
+  const { data, isLoading, isError, error, isPlaceholderData } = useQuery({
+    queryKey: ["questions", { page, limit, letterSelected, showDeleted }],
+    queryFn: ({ signal, queryKey }) =>
+      getAllQuestionsRequest(
+        signal,
+        queryKey[1].page,
+        queryKey[1].limit,
+        queryKey[1].letterSelected,
+        queryKey[1].showDeleted,
+      ),
+    placeholderData: keepPreviousData,
+  });
 
-    getQuestions();
-  }, [page, limit, letterSelected, showDeleted, refreshKey]);
+  const { mutate: addQuestionMutation } = useMutation({
+    mutationFn: createQuestionRequest,
+    onSuccess: () => {
+      addModal.close();
+      showToast("Question is added", "success");
+      queryClient.invalidateQueries({ queryKey: ["questions"] });
+    },
+  });
+
+  const { mutate: editQuestionMutation } = useMutation({
+    mutationFn: updateQuestionRequest,
+    onSuccess: () => {
+      editModal.close();
+      showToast("Question is updated successfully", "success");
+      queryClient.invalidateQueries({ queryKey: ["questions"] });
+    },
+  });
+
+  useEffect(() => {
+    if (data?.totalPages) {
+      setTotalPages(data.totalPages);
+    }
+  }, [data?.totalPages, setTotalPages]);
 
   // Modals
   const filterModal = useModal();
@@ -73,6 +87,8 @@ export default function QuestionPage() {
   const editModal = useModal();
   const restoreModal = useModal();
   const importModal = useModal();
+
+  const { showToast } = useToast();
 
   // Functions
   function renderQuestionRow(row) {
@@ -107,13 +123,15 @@ export default function QuestionPage() {
         onDeletedChange={toggleShowDeleted}
       />
       <CustomTable
-        data={data}
-        isFetching={isFetching}
+        data={data?.questions}
+        isLoading={isLoading}
+        isError={isError}
         error={error}
+        isPlaceholderData={isPlaceholderData}
         columns={tableColumns}
         showDeleted={showDeleted}
-        page={page}
-        totalPages={totalPages}
+        page={data?.page}
+        totalPages={data?.totalPages}
         onPageChange={setPage}
         noDataTitle="No Questions Available"
         noDataMessage="Questions will appear here."
@@ -125,17 +143,13 @@ export default function QuestionPage() {
       <AddQuestionModal
         isOpen={addModal.isOpen}
         handleClose={addModal.close}
-        handleRefresh={handleRefresh}
-        successMessage="Question added successfully"
-        failMessage="Fail to add question"
+        onSubmit={addQuestionMutation}
       />
       <EditQuestionModal
         question={editModal.data}
         isOpen={editModal.isOpen}
         handleClose={editModal.close}
-        handleRefresh={handleRefresh}
-        successMessage="Question updated successfully"
-        failMessage="Question failed to update"
+        onSubmit={editQuestionMutation}
       />
       <RestoreModal
         isOpen={restoreModal.isOpen}

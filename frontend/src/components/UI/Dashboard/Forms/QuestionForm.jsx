@@ -1,27 +1,17 @@
 import { useState, useEffect, useActionState } from "react";
-import getAllLettersRequest from "../../../../api/letters.api";
 import FormInput from "./FormInput";
 import FormSelect from "./FormSelect";
-import { useAuth } from "../../../../hooks/useAuth";
 import { isNotEmpty } from "../../../../util/validation";
-import { useToast } from "../../../../hooks/useToast";
 
-export default function QuestionForm({
-  initialValues,
-  onSubmit,
-  handleRefresh,
-  handleClose,
-  successMessage,
-  failMessage,
-}) {
-  const [letters, setLetters] = useState([]);
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+export default function QuestionForm({ initialValues, onSubmit }) {
   const [formState, formAction] = useActionState(submitQuestionAction, {
     errors: null,
   });
-  const { admin } = useAuth();
-  const { showToast } = useToast();
+
   const [selectedLetter, setSelectedLetter] = useState(
-    Number(initialValues?.letter_id) || formState.enteredValues?.letterId || "",
+    initialValues?.letter_id || formState.enteredValues?.letterId || "",
   );
 
   async function submitQuestionAction(prevState, formData) {
@@ -31,8 +21,8 @@ export default function QuestionForm({
     const answer = formData.get("answer");
 
     const selectedLetter = letters.find(
-      (letter) => letter.id === Number(letterId),
-    )?.letter;
+      (letter, index) => index + 1 === Number(letterId),
+    );
 
     let errors = {};
 
@@ -58,7 +48,8 @@ export default function QuestionForm({
     // Submit
     try {
       if (initialValues) {
-        await onSubmit(initialValues.id, {
+        await onSubmit({
+          id: initialValues.id,
           letter_id: letterId,
           letter: selectedLetter,
           question_text: questionText,
@@ -72,16 +63,12 @@ export default function QuestionForm({
           answer,
         });
       }
-      handleClose();
-      handleRefresh();
-      showToast(successMessage, "success");
+
       return { errors: null };
     } catch (error) {
-      console.log(error);
-      showToast(failMessage, "fail");
       return {
         errors: {
-          general: error.response?.data?.message || failMessage,
+          general: error.response?.data?.message || "Operation failed...",
           errors,
         },
         enteredValues: { letterId, questionText, answer },
@@ -89,18 +76,7 @@ export default function QuestionForm({
     }
   }
 
-  useEffect(() => {
-    async function fetchLetters() {
-      try {
-        const data = await getAllLettersRequest();
-        setLetters(data);
-      } catch (error) {
-        setError(error.message || "Problem in loading letters...");
-      }
-    }
-    fetchLetters();
-  }, []);
-
+  // When initialValues come after the form is rendered we use useEffect
   useEffect(() => {
     if (initialValues?.letter_id) {
       setSelectedLetter(Number(initialValues.letter_id));

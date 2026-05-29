@@ -1,15 +1,12 @@
 import QuestionForm from "../Dashboard/Forms/QuestionForm";
 import ModalHeader from "./ModalHeader";
 import { Puzzle } from "lucide-react";
-import { updateQuestionRequest } from "../../../api/questions.api";
 import Modal from "./Modal";
 export default function EditQuestionModal({
   question,
   isOpen,
   handleClose,
-  handleRefresh,
-  successMessage,
-  failMessage,
+  onSubmit,
 }) {
   return (
     <Modal open={isOpen} onClose={handleClose}>
@@ -20,11 +17,8 @@ export default function EditQuestionModal({
       />
       <QuestionForm
         initialValues={question}
-        onSubmit={updateQuestionRequest}
-        handleRefresh={handleRefresh}
+        onSubmit={onSubmit}
         handleClose={handleClose}
-        successMessage={successMessage}
-        failMessage={failMessage}
       />
     </Modal>
   );

@@ -1,40 +1,45 @@
+// Libraries / packages
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import { Plus, ShieldCheck } from "lucide-react";
-import StatCards from "../../components/UI/Dashboard/StatsCards/StatCards";
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+// Hooks
+import { useAuth } from "../../hooks/useAuth";
+
+// Functions
 import { getAllStatsRequest } from "../../api/stats.api";
+
+// Components
+import StatCards from "../../components/UI/Dashboard/StatsCards/StatCards";
 import Loading from "../../components/UI/Loading";
 import Error from "../../components/UI/Error";
 
 export default function HomePage() {
   const { admin } = useAuth();
-  const [stats, setStats] = useState(null);
-  const [error, setError] = useState(null);
-  const [isFetching, setIsFetching] = useState(true);
 
-  useEffect(() => {
-    setIsFetching(true);
-    async function getStats() {
-      try {
-        const data = await getAllStatsRequest();
-        setStats(data);
-      } catch (error) {
-        setError(error.response?.data?.message || "Failed to load stats");
-      } finally {
-        setIsFetching(false);
-      }
-    }
+  const {
+    data: stats,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["stats"],
+    queryFn: ({ signal }) => getAllStatsRequest(signal),
+    staleTime: 10000,
+  });
 
-    getStats();
-  }, []);
-
-  if (isFetching) {
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (error) {
-    return <Error errorMessage={error} />;
+  if (isError) {
+    return (
+      <Error
+        errorMessage={
+          error.info?.message || "Failed to load stats , please try again..."
+        }
+      />
+    );
   }
 
   const cards = [

@@ -5,18 +5,21 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { lazy, Suspense } from "react";
+
+// Components
 import Toast from "./components/UI/Toast.jsx";
+import Loading from "./components/UI/Loading.jsx";
 
 // Game related pages
 import GameHomePage from "./pages/game/GameHomePage.jsx";
 import GamePlayPage from "./pages/game/GamePlayPage.jsx";
 import GameSetupPage from "./pages/game/GameSetupPage.jsx";
 
-// Admin related pages
 // import LoginPage from "./pages/auth/LoginPage.jsx";
 import ProtectedRoute from "./components/UI/ProtectedRoute.jsx";
 import SuperAdminRoute from "./components/UI/SuperAdminRoute.jsx";
 
+// Lazy page loaders
 const LoginPage = lazy(() => import("./pages/auth/LoginPage.jsx"));
 const DashboardLayout = lazy(
   () => import("./pages/dashboard/DashboardLayout.jsx"),
@@ -25,6 +28,7 @@ const HomePage = lazy(() => import("./pages/dashboard/HomePage.jsx"));
 const QuestionPage = lazy(() => import("./pages/dashboard/QuestionsPage.jsx"));
 const LettersPage = lazy(() => import("./pages/dashboard/LettersPage.jsx"));
 const AdminsPage = lazy(() => import("./pages/dashboard/AdminsPage.jsx"));
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,7 +40,7 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: (
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<Loading />}>
         <LoginPage />
       </Suspense>
     ),
@@ -47,12 +51,15 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: (
-          <Suspense>
+          <Suspense fallback={<Loading />}>
             <DashboardLayout />
           </Suspense>
         ),
         children: [
-          { index: true, element: <HomePage /> },
+          {
+            index: true,
+            element: <HomePage />,
+          },
           { path: "questions", element: <QuestionPage /> },
           { path: "letters", element: <LettersPage /> },
           {

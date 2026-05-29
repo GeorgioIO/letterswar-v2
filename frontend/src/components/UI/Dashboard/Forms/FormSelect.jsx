@@ -20,11 +20,10 @@ export default function FormSelect({
           {placeholder}
         </option>
 
-        {options.map((opt) => {
-          const keys = Object.keys(opt);
+        {options.map((letter, index) => {
           return (
-            <option key={opt.id} value={Number(opt.id)}>
-              {opt[keys[1]]}
+            <option key={index} value={index + 1}>
+              {letter}
             </option>
           );
         })}

@@ -2,13 +2,15 @@ import Loading from "../../Loading";
 import TableContent from "./TableContent";
 import TableFooter from "./TableFooter";
 import TableHeader from "./TableHeader";
-import { CircleAlert, InboxIcon } from "lucide-react";
+import { InboxIcon } from "lucide-react";
 import Error from "../../Error";
 
 export default function CustomTable({
   data,
-  isFetching,
+  isLoading,
+  isError,
   error,
+  isPlaceholderData,
   columns,
   page,
   showDeleted,
@@ -21,12 +23,19 @@ export default function CustomTable({
   handleOpenEdit,
   renderRow,
 }) {
-  if (isFetching) {
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (error) {
-    return <Error errorMessage={error} className="min-h-screen" />;
+  if (isError) {
+    return (
+      <Error
+        errorMessage={
+          error?.response?.data.message || "Failed to load message..."
+        }
+        className="min-h-screen"
+      />
+    );
   }
 
   if (data.length === 0) {
@@ -58,6 +67,7 @@ export default function CustomTable({
       </div>
       {/* Footer */}
       <TableFooter
+        isPlaceholderData={isPlaceholderData}
         page={page}
         totalPages={totalPages}
         onPageChange={onPageChange}

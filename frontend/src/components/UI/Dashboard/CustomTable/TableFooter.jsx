@@ -2,7 +2,12 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import NavigationButton from "../../Pagination/NavigationButton";
 import { useEffect, useState } from "react";
 
-export default function TableFooter({ page, totalPages, onPageChange }) {
+export default function TableFooter({
+  isPlaceholderData,
+  page,
+  totalPages,
+  onPageChange,
+}) {
   const [currentPage, setCurrentPage] = useState(page);
 
   useEffect(() => {
@@ -38,7 +43,10 @@ export default function TableFooter({ page, totalPages, onPageChange }) {
 
   return (
     <footer className="flex justify-between items-center px-6 py-4 border-t border-gray-100">
-      <NavigationButton onClick={handlePreviousClick} disabled={page === 1}>
+      <NavigationButton
+        onClick={handlePreviousClick}
+        disabled={page === 1 || isPlaceholderData}
+      >
         <ChevronLeft size={15} /> Previous
       </NavigationButton>
 
@@ -63,7 +71,7 @@ export default function TableFooter({ page, totalPages, onPageChange }) {
 
       <NavigationButton
         onClick={handleNextClick}
-        disabled={page === totalPages}
+        disabled={page === totalPages || isPlaceholderData}
       >
         Next <ChevronRight size={15} />
       </NavigationButton>
