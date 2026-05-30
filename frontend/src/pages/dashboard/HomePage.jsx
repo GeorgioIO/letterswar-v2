@@ -19,7 +19,7 @@ export default function HomePage() {
 
   const {
     data: stats,
-    isPending,
+    isLoading,
     isError,
     error,
   } = useQuery({
@@ -32,7 +32,7 @@ export default function HomePage() {
     return <Loading />;
   }
 
-  if (isError) {
+  if (isLoading) {
     return (
       <Error
         errorMessage={
