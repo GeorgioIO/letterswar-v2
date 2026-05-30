@@ -74,6 +74,7 @@ export default function QuestionForm({
         enteredValues: { letterId, questionText, answer },
       };
     } catch (error) {
+      alert(error.response?.data?.message);
       return {
         errors: {
           general: error.response?.data?.message || "Operation failed...",

@@ -24,18 +24,15 @@ export default function AdminsPage() {
     queryFn: getAllAdminsRequest,
   });
 
-  const { mutate: addAdminMutation, isPending: isAdding } = useMutation({
+  const { mutateAsync: addAdminMutation, isPending: isAdding } = useMutation({
     mutationFn: createAdminRequest,
     onSuccess: () => {
       addModal.close();
       queryClient.invalidateQueries({ queryKey: ["admins"] });
       showToast("Admin is added successfully!", "success");
     },
-    onError: (error) => {
-      showToast(
-        error?.response?.data?.message || "Failed to add admin",
-        "fail",
-      );
+    onError: () => {
+      showToast("Adding Admin Failed!", "fail");
     },
   });
 
@@ -47,7 +44,7 @@ export default function AdminsPage() {
       showToast("Admin is deleted successfully!", "success");
     },
     onError: () => {
-      showToast("Failed to delete admin", "fail");
+      showToast("Deleting Admin Failed!", "fail");
     },
   });
 

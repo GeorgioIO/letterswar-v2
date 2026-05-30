@@ -54,7 +54,7 @@ export default function AdminForm({ onSubmit, isAdding }) {
     }
 
     try {
-      onSubmit({ username, email, password, role });
+      await onSubmit({ username, email, password, role });
       return {
         errors: null,
         enteredValues: { username, email, password, role },

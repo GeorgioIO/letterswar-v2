@@ -57,14 +57,19 @@ export default function QuestionPage() {
     placeholderData: keepPreviousData,
   });
 
-  const { mutate: addQuestionMutation, isPending: isAdding } = useMutation({
-    mutationFn: createQuestionRequest,
-    onSuccess: () => {
-      addModal.close();
-      showToast("Question is added", "success");
-      queryClient.invalidateQueries({ queryKey: ["questions"] });
+  const { mutateAsync: addQuestionMutation, isPending: isAdding } = useMutation(
+    {
+      mutationFn: createQuestionRequest,
+      onSuccess: () => {
+        addModal.close();
+        showToast("Question is added", "success");
+        queryClient.invalidateQueries({ queryKey: ["questions"] });
+      },
+      onError: () => {
+        showToast("Add Question Failed!", "fail");
+      },
     },
-  });
+  );
 
   const { mutateAsync: importQuestionsMutation, isPending: isImporting } =
     useMutation({
@@ -76,14 +81,18 @@ export default function QuestionPage() {
       },
     });
 
-  const { mutate: editQuestionMutation, isPending: isEditing } = useMutation({
-    mutationFn: updateQuestionRequest,
-    onSuccess: () => {
-      editModal.close();
-      showToast("Question is updated successfully", "success");
-      queryClient.invalidateQueries({ queryKey: ["questions"] });
-    },
-  });
+  const { mutateAsync: editQuestionMutation, isPending: isEditing } =
+    useMutation({
+      mutationFn: updateQuestionRequest,
+      onSuccess: () => {
+        editModal.close();
+        showToast("Question is updated successfully", "success");
+        queryClient.invalidateQueries({ queryKey: ["questions"] });
+      },
+      onError: () => {
+        showToast("Edit Question Failed", "fail");
+      },
+    });
 
   const { mutate: deleteQuestionMutation, isPending: isDeleting } = useMutation(
     {
