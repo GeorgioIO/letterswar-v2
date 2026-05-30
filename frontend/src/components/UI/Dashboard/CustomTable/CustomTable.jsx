@@ -3,13 +3,10 @@ import TableContent from "./TableContent";
 import TableFooter from "./TableFooter";
 import TableHeader from "./TableHeader";
 import { InboxIcon } from "lucide-react";
-import Error from "../../Error";
 
 export default function CustomTable({
   data,
   isLoading,
-  isError,
-  error,
   isPlaceholderData,
   columns,
   page,
@@ -25,17 +22,6 @@ export default function CustomTable({
 }) {
   if (isLoading) {
     return <Loading />;
-  }
-
-  if (isError) {
-    return (
-      <Error
-        errorMessage={
-          error?.response?.data.message || "Failed to load message..."
-        }
-        className="min-h-screen"
-      />
-    );
   }
 
   if (data.length === 0) {

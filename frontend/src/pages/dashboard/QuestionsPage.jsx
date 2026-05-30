@@ -5,6 +5,7 @@ import PageHeader from "../../components/UI/Dashboard/PageHeader";
 import FilterLetterModal from "../../components/UI/Modals/FilterLetterModal";
 import AddQuestionModal from "../../components/UI/Modals/AddQuestionModal";
 import DeleteModal from "../../components/UI/Modals/DeleteModal";
+import Error from "../../components/UI/Error";
 
 // Hooks
 import { useEffect, useState } from "react";
@@ -142,6 +143,17 @@ export default function QuestionPage() {
     setShowDeleted((prevState) => !prevState);
   }
 
+  if (isError) {
+    return (
+      <Error
+        errorMessage={
+          error?.response?.data.message || "Failed to fetch questions..."
+        }
+        className="min-h-screen"
+      />
+    );
+  }
+
   return (
     <section className="flex flex-col gap-5">
       <PageHeader
@@ -157,8 +169,6 @@ export default function QuestionPage() {
       <CustomTable
         data={data?.questions}
         isLoading={isPending}
-        isError={isError}
-        error={error}
         isPlaceholderData={isPlaceholderData}
         columns={tableColumns}
         showDeleted={showDeleted}

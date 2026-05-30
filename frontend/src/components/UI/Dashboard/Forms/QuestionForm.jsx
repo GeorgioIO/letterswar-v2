@@ -64,7 +64,10 @@ export default function QuestionForm({ initialValues, onSubmit }) {
         });
       }
 
-      return { errors: null };
+      return {
+        errors: null,
+        enteredValues: { letterId, questionText, answer },
+      };
     } catch (error) {
       return {
         errors: {
