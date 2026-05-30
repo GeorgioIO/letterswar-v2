@@ -19,7 +19,7 @@ export default function HomePage() {
 
   const {
     data: stats,
-    isLoading,
+    isPending,
     isError,
     error,
   } = useQuery({
@@ -28,7 +28,7 @@ export default function HomePage() {
     staleTime: 10000,
   });
 
-  if (isLoading) {
+  if (isPending) {
     return <Loading />;
   }
 
@@ -36,7 +36,8 @@ export default function HomePage() {
     return (
       <Error
         errorMessage={
-          error.info?.message || "Failed to load stats , please try again..."
+          error?.response?.data?.message ||
+          "Failed to load stats , please try again..."
         }
       />
     );

@@ -19,7 +19,7 @@ export default function AdminsPage() {
   const deleteModal = useModal();
   const { showToast } = useToast();
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isFetching, isError, error } = useQuery({
     queryKey: ["admins"],
     queryFn: getAllAdminsRequest,
   });
@@ -88,7 +88,7 @@ export default function AdminsPage() {
       <CustomTable
         data={data && data}
         columns={tableColumns}
-        isLoading={isLoading}
+        isLoading={isFetching}
         isError={isError}
         error={error}
         renderRow={renderAdminRow}

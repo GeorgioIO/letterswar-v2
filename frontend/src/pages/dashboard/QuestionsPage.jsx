@@ -44,7 +44,7 @@ export default function QuestionPage() {
     resetPage,
   } = usePagination();
 
-  const { data, isLoading, isError, error, isPlaceholderData } = useQuery({
+  const { data, isPending, isError, error, isPlaceholderData } = useQuery({
     queryKey: ["questions", { page, limit, letterSelected, showDeleted }],
     queryFn: ({ signal, queryKey }) =>
       getAllQuestionsRequest(
@@ -156,7 +156,7 @@ export default function QuestionPage() {
       />
       <CustomTable
         data={data?.questions}
-        isLoading={isLoading}
+        isLoading={isPending}
         isError={isError}
         error={error}
         isPlaceholderData={isPlaceholderData}
