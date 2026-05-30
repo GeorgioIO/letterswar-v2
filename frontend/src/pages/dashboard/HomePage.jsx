@@ -28,11 +28,11 @@ export default function HomePage() {
     staleTime: 10000,
   });
 
-  if (isPending) {
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (isLoading) {
+  if (isError) {
     return (
       <Error
         errorMessage={
