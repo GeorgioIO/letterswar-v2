@@ -48,6 +48,10 @@ app.use("/api/v1/admins", adminsRoutes);
 app.use("/api/v1/stats", statsRoutes);
 app.use("/api/v1/board", boardRoutes);
 
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {

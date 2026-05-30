@@ -4,9 +4,10 @@ export function errorHandler(err, req, res, next) {
       return res.status(400).json({ message: "Email already in use." });
     }
 
-    if (err.code) {
+    if (err.message.includes("username")) {
       return res.status(400).json({ message: "Username already in use." });
     }
+
     return res.status(400).json({ message: "Duplicate entry." });
   }
 
