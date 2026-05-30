@@ -34,7 +34,6 @@ export default function QuestionPage() {
   const [letterSelected, setLetterSelected] = useState(null);
   const [showDeleted, setShowDeleted] = useState(false);
 
-  const { refreshKey, handleRefresh } = useRefresh();
   const {
     page,
     limit,
@@ -66,6 +65,16 @@ export default function QuestionPage() {
       queryClient.invalidateQueries({ queryKey: ["questions"] });
     },
   });
+
+  const { mutateAsync: importQuestionsMutation, isPending: isImporting } =
+    useMutation({
+      mutationFn: importQuestionsRequest,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["questions"] });
+        showToast("Importing data successfull", "success");
+        importModal.close();
+      },
+    });
 
   const { mutate: editQuestionMutation, isPending: isEditing } = useMutation({
     mutationFn: updateQuestionRequest,
@@ -223,8 +232,9 @@ export default function QuestionPage() {
       />
       <QuestionImportModal
         isOpen={importModal.isOpen}
+        isImporting={isImporting}
         handleClose={importModal.close}
-        handleRefresh={handleRefresh}
+        onSubmit={importQuestionsMutation}
       />
     </section>
   );

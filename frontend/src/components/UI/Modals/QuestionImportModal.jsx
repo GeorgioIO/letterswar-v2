@@ -5,47 +5,36 @@ import { Import } from "lucide-react";
 import Papa from "papaparse";
 import ImportTable from "../Dashboard/MiniImportTable/ImportTable";
 import Error from "../Error";
-import { importQuestionsRequest } from "../../../api/questions.api";
-import { useToast } from "../../../hooks/useToast";
 
 const columns = ["Letter", "Question", "Answer"];
 
 export default function QuestionImportModal({
   isOpen,
+  isImporting,
   handleClose,
-  handleRefresh,
+  onSubmit,
 }) {
   const [previewData, setPreviewData] = useState([]);
-  const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState(null);
   const fileInput = useRef();
-  const { showToast } = useToast();
 
   async function handleSubmit() {
     if (previewData.length == 0) return;
 
-    setIsUploading(true);
-    setError(null);
-
     try {
-      await importQuestionsRequest({
+      await onSubmit({
         questions: JSON.stringify(previewData),
       });
 
-      handleRefresh();
       setPreviewData([]);
       if (fileInput.current) fileInput.current.value = "";
-      showToast("Importing data successfull", "success");
     } catch (error) {
       setPreviewData([]);
       setError(error.response?.data?.message);
-    } finally {
-      setIsUploading(false);
     }
   }
 
-  function handleInputLogic(event) {
-    setError(null);
+  function handleInputLogic() {
     const file = fileInput.current.files[0];
     if (!file) return;
 
@@ -65,7 +54,7 @@ export default function QuestionImportModal({
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: (result, file) => {
+      complete: (result) => {
         setPreviewData(result.data);
       },
       error: (error) => {
@@ -153,7 +142,7 @@ export default function QuestionImportModal({
               onClick={handleSubmit}
               className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded cursor-pointer text-sm font-medium transition"
             >
-              {isUploading ? "Importing..." : "Submit"}
+              {isImporting ? "Importing..." : "Submit"}
             </button>
             <p className="text-base text-gray-400 font-black tracking-tighter">
               Total Rows : {previewData.length}
