@@ -9,6 +9,8 @@ export default function AddAdminModal({
   onSubmit,
   handleClose,
 }) {
+  if (!isOpen) return null;
+
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <ModalHeader title="Add Admin" Icon={Shield} handleClose={handleClose} />

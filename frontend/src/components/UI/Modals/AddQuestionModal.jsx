@@ -9,6 +9,8 @@ export default function AddQuestionModal({
   handleClose,
   onSubmit,
 }) {
+  if (!isOpen) return null;
+
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <ModalHeader

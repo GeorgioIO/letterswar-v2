@@ -5,8 +5,6 @@ import { GridLoader } from "react-spinners";
 export default function ProtectedRoute() {
   const { isLoggedIn, isLoading, admin } = useAuth();
 
-  console.log(isLoggedIn, admin);
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center flex-col gap-7">
