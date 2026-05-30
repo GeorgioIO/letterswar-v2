@@ -19,24 +19,27 @@ export default function AdminsPage() {
   const deleteModal = useModal();
   const { showToast } = useToast();
 
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["admins"],
     queryFn: getAllAdminsRequest,
   });
 
-  const { mutate: addAdminMutation } = useMutation({
+  const { mutate: addAdminMutation, isPending: isAdding } = useMutation({
     mutationFn: createAdminRequest,
     onSuccess: () => {
       addModal.close();
       queryClient.invalidateQueries({ queryKey: ["admins"] });
       showToast("Admin is added successfully!", "success");
     },
-    onError: () => {
-      showToast("Failed to add admin", "fail");
+    onError: (error) => {
+      showToast(
+        error?.response?.data?.message || "Failed to add admin",
+        "fail",
+      );
     },
   });
 
-  const { mutate: deleteAdminMutation, isPending } = useMutation({
+  const { mutate: deleteAdminMutation, isPending: isDeleting } = useMutation({
     mutationFn: deleteAdminRequest,
     onSuccess: () => {
       deleteModal.close();
@@ -88,7 +91,7 @@ export default function AdminsPage() {
       <CustomTable
         data={data && data}
         columns={tableColumns}
-        isLoading={isFetching}
+        isLoading={isLoading}
         isError={isError}
         error={error}
         renderRow={renderAdminRow}
@@ -98,12 +101,13 @@ export default function AdminsPage() {
       />
       <AddAdminModal
         isOpen={addModal.isOpen}
+        isAdding={isAdding}
         handleClose={addModal.close}
         onSubmit={addAdminMutation}
       />
       <DeleteModal
         isOpen={deleteModal.isOpen}
-        isPending={isPending}
+        isDeleting={isDeleting}
         handleClose={deleteModal.close}
         title="Delete Admin"
         message="You're going to delete this admin. Are you sure (This action is unrestorable)?"

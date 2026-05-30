@@ -13,7 +13,7 @@ const adminRoles = [
   { value: "editor", label: "Editor" },
 ];
 
-export default function AdminForm({ onSubmit }) {
+export default function AdminForm({ onSubmit, isAdding }) {
   const [formState, formAction] = useActionState(submitAdminAction, {
     errors: null,
   });
@@ -55,11 +55,14 @@ export default function AdminForm({ onSubmit }) {
 
     try {
       onSubmit({ username, email, password, role });
-      return { errors: null };
+      return {
+        errors: null,
+        enteredValues: { username, email, password, role },
+      };
     } catch (error) {
       return {
         errors: {
-          general: error.response?.data?.message || "Fail to add admin",
+          general: error.response?.data?.message || "Failed to add admin",
           errors,
         },
         enteredValues: { username, email, password, role },
@@ -128,7 +131,8 @@ export default function AdminForm({ onSubmit }) {
         type="submit"
         className="cursor-pointer mt-2 h-10 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
       >
-        Submit
+        {isAdding && "Adding Admin..."}
+        {!isAdding && "Submit"}
       </button>
     </form>
   );

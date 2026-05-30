@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 export default function LettersPage() {
   const {
     data: letters,
-    isFetching,
+    isLoading,
     isError,
     error,
   } = useQuery({
@@ -19,7 +19,7 @@ export default function LettersPage() {
       <PageHeader sectionTitle="Letters" />
       <LettersGrid
         letters={letters}
-        isLoading={isFetching}
+        isLoading={isLoading}
         isError={isError}
         error={error}
       />
