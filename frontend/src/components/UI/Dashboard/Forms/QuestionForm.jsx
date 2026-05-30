@@ -5,7 +5,12 @@ import { isNotEmpty } from "../../../../util/validation";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-export default function QuestionForm({ initialValues, onSubmit }) {
+export default function QuestionForm({
+  initialValues,
+  onSubmit,
+  isAdding,
+  isEditing,
+}) {
   const [formState, formAction] = useActionState(submitQuestionAction, {
     errors: null,
   });
@@ -137,7 +142,9 @@ export default function QuestionForm({ initialValues, onSubmit }) {
         type="submit"
         className="cursor-pointer mt-2 h-10 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
       >
-        Submit
+        {isAdding && "Adding Question..."}
+        {isEditing && "Editing Question..."}
+        {!isAdding && !isEditing && "Submit"}
       </button>
     </form>
   );

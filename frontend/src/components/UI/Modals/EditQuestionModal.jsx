@@ -5,6 +5,7 @@ import Modal from "./Modal";
 export default function EditQuestionModal({
   question,
   isOpen,
+  isEditing,
   handleClose,
   onSubmit,
 }) {
@@ -19,6 +20,7 @@ export default function EditQuestionModal({
         initialValues={question}
         onSubmit={onSubmit}
         handleClose={handleClose}
+        isEditing={isEditing}
       />
     </Modal>
   );

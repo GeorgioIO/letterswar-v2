@@ -3,7 +3,7 @@ import { CircleAlert } from "lucide-react";
 
 export default function DeleteModal({
   isOpen,
-  isPending,
+  isDeleting,
   handleClose,
   title,
   message,
@@ -22,8 +22,12 @@ export default function DeleteModal({
         </div>
 
         <div className="flex gap-3 w-full mt-1">
-          {isPending && <p className="text-center">Deleting...</p>}
-          {!isPending && (
+          {isDeleting && (
+            <p className="w-full text-center text-red-500 font-black tracking-wider">
+              Deleting...
+            </p>
+          )}
+          {!isDeleting && (
             <>
               <button
                 onClick={handleClose}

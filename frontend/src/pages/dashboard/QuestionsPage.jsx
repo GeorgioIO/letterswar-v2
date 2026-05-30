@@ -58,7 +58,7 @@ export default function QuestionPage() {
     placeholderData: keepPreviousData,
   });
 
-  const { mutate: addQuestionMutation } = useMutation({
+  const { mutate: addQuestionMutation, isPending: isAdding } = useMutation({
     mutationFn: createQuestionRequest,
     onSuccess: () => {
       addModal.close();
@@ -67,7 +67,7 @@ export default function QuestionPage() {
     },
   });
 
-  const { mutate: editQuestionMutation } = useMutation({
+  const { mutate: editQuestionMutation, isPending: isEditing } = useMutation({
     mutationFn: updateQuestionRequest,
     onSuccess: () => {
       editModal.close();
@@ -76,36 +76,39 @@ export default function QuestionPage() {
     },
   });
 
-  const { mutate: deleteQuestionMutation } = useMutation({
-    mutationFn: (id) => deleteQuestionRequest(id),
-    onSuccess: () => {
-      deleteModal.close();
-      showToast("Question is Deleted!", "success");
+  const { mutate: deleteQuestionMutation, isPending: isDeleting } = useMutation(
+    {
+      mutationFn: (id) => deleteQuestionRequest(id),
+      onSuccess: () => {
+        deleteModal.close();
+        showToast("Question is Deleted!", "success");
 
-      if (data?.questions?.length === 1 && page > 1) {
-        setPage((prev) => prev - 1);
-      }
+        if (data?.questions?.length === 1 && page > 1) {
+          setPage((prev) => prev - 1);
+        }
 
-      queryClient.invalidateQueries({ queryKey: ["questions"] });
+        queryClient.invalidateQueries({ queryKey: ["questions"] });
+      },
+      onError: () => {
+        deleteModal.close();
+        showToast("Failed to delete question", "fail");
+      },
     },
-    onError: () => {
-      deleteModal.close();
-      showToast("Failed to delete question", "fail");
-    },
-  });
+  );
 
-  const { mutate: restoreQuestionMutation } = useMutation({
-    mutationFn: (id) => restoreQuestionRequest(id),
-    onSuccess: () => {
-      restoreModal.close();
-      showToast("Question is Restored!", "success");
-      queryClient.invalidateQueries({ queryKey: ["questions"] });
-    },
-    onError: () => {
-      restoreModal.close();
-      showToast("Failed to restore question", "fail");
-    },
-  });
+  const { mutate: restoreQuestionMutation, isPending: isRestoring } =
+    useMutation({
+      mutationFn: (id) => restoreQuestionRequest(id),
+      onSuccess: () => {
+        restoreModal.close();
+        showToast("Question is Restored!", "success");
+        queryClient.invalidateQueries({ queryKey: ["questions"] });
+      },
+      onError: () => {
+        restoreModal.close();
+        showToast("Failed to restore question", "fail");
+      },
+    });
 
   useEffect(() => {
     if (data?.totalPages) {
@@ -184,17 +187,20 @@ export default function QuestionPage() {
       />
       <AddQuestionModal
         isOpen={addModal.isOpen}
+        isAdding={isAdding}
         handleClose={addModal.close}
         onSubmit={addQuestionMutation}
       />
       <EditQuestionModal
         question={editModal.data}
+        isEditing={isEditing}
         isOpen={editModal.isOpen}
         handleClose={editModal.close}
         onSubmit={editQuestionMutation}
       />
       <RestoreModal
         isOpen={restoreModal.isOpen}
+        isRestoring={isRestoring}
         handleClose={restoreModal.close}
         title="Restore Question"
         message="You're going to restore this question. Are you sure?"
@@ -202,6 +208,7 @@ export default function QuestionPage() {
       />
       <DeleteModal
         isOpen={deleteModal.isOpen}
+        isDeleting={isDeleting}
         handleClose={deleteModal.close}
         title="Delete Question"
         message="You're going to delete this question. Are you sure?"

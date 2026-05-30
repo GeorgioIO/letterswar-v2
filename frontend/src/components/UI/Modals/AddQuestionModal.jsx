@@ -3,7 +3,12 @@ import { Puzzle } from "lucide-react";
 import Modal from "./Modal";
 import QuestionForm from "../Dashboard/Forms/QuestionForm";
 
-export default function AddQuestionModal({ isOpen, handleClose, onSubmit }) {
+export default function AddQuestionModal({
+  isOpen,
+  isAdding,
+  handleClose,
+  onSubmit,
+}) {
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <ModalHeader
@@ -11,7 +16,7 @@ export default function AddQuestionModal({ isOpen, handleClose, onSubmit }) {
         Icon={Puzzle}
         handleClose={handleClose}
       />
-      <QuestionForm onSubmit={onSubmit} />
+      <QuestionForm onSubmit={onSubmit} isAdding={isAdding} />
     </Modal>
   );
 }
