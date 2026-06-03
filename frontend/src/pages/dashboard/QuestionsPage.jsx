@@ -35,6 +35,7 @@ export default function QuestionPage() {
 
   const { page, limit, setPage, setTotalPages, handleLimitChange, resetPage } =
     usePagination();
+  const { showToast } = useToast();
 
   const { data, isLoading, isError, error, isPlaceholderData } = useQuery({
     queryKey: ["questions", { page, limit, letterSelected, showDeleted }],
@@ -133,8 +134,6 @@ export default function QuestionPage() {
   const editModal = useModal();
   const restoreModal = useModal();
   const importModal = useModal();
-
-  const { showToast } = useToast();
 
   // Functions
   function renderQuestionRow(row) {

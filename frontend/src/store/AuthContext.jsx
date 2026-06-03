@@ -7,7 +7,7 @@ export const AuthContext = createContext({
   isLoggedIn: false,
   isLoading: true,
   admin: {},
-  login: (data) => {},
+  login: () => {},
   logout: () => {},
 });
 
@@ -36,14 +36,15 @@ function AuthContextProvider({ children }) {
       const data = await loginRequest(loginData);
       setAdmin(data.admin);
     } catch (error) {
-      throw new Error(error.response?.data?.message || "Problem logging in");
+      throw new Error(error.response?.data?.message || "Problem logging in", {
+        cause: error,
+      });
     }
   }
 
   async function logout() {
     try {
       await logoutRequest();
-    } catch {
     } finally {
       setAdmin(null);
     }
