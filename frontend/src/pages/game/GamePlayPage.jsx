@@ -15,17 +15,9 @@ export default function GamePlayPage() {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
 
-  const {
-    board,
-    teams,
-    currentTurn,
-    phase,
-    activeCell,
-    activeQuestion,
-    usedQuestionIds,
-    winner,
-    answerMode,
-  } = useSelector((state) => state.game);
+  const { board, teams, currentTurn, phase, usedQuestionIds } = useSelector(
+    (state) => state.game,
+  );
 
   if (teams.orange.name === "" && teams.green.name === "") {
     return <Navigate to="/game/setup" />;
@@ -35,7 +27,7 @@ export default function GamePlayPage() {
     return () => {
       dispatch(gameActions.resetGame());
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     async function initBoard() {
@@ -47,7 +39,7 @@ export default function GamePlayPage() {
       }
     }
     initBoard();
-  }, []);
+  }, [dispatch]);
 
   async function handleCellClick(cell) {
     if (phase !== "picking") return;
@@ -61,7 +53,7 @@ export default function GamePlayPage() {
         usedQuestionIds,
       );
       dispatch(gameActions.setActiveQuestion(question));
-    } catch (error) {
+    } catch {
       try {
         const question = await getRandomQuestionRequest(cell.letter, []);
         dispatch(gameActions.setActiveQuestion(question));

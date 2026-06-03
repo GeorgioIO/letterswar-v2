@@ -10,7 +10,6 @@ import Error from "../../components/UI/Error";
 // Hooks
 import { useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
-import { useRefresh } from "../../hooks/useRefresh";
 import { useModal } from "../../hooks/useModal";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "../../util/tanstack";
@@ -34,15 +33,8 @@ export default function QuestionPage() {
   const [letterSelected, setLetterSelected] = useState(null);
   const [showDeleted, setShowDeleted] = useState(false);
 
-  const {
-    page,
-    limit,
-    totalPages,
-    setPage,
-    setTotalPages,
-    handleLimitChange,
-    resetPage,
-  } = usePagination();
+  const { page, limit, setPage, setTotalPages, handleLimitChange, resetPage } =
+    usePagination();
 
   const { data, isLoading, isError, error, isPlaceholderData } = useQuery({
     queryKey: ["questions", { page, limit, letterSelected, showDeleted }],

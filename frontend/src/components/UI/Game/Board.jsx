@@ -1,6 +1,6 @@
 import Cell from "./Cell";
 
-export default function ({ board, onCellClick, currentTurn }) {
+export default function Board({ board, onCellClick, currentTurn }) {
   return (
     <div
       className="
