@@ -6,7 +6,7 @@ export default function DashboardLayout() {
       <Sidebar />
       <div className="h-full flex-1">
         <main className="h-full p-5">
-          <Outlet /> {/* current page renders here */}
+          <Outlet />
         </main>
       </div>
     </div>
