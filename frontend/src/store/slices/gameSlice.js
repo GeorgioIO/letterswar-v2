@@ -5,6 +5,7 @@ const initialGameSliceState = {
     orange: { name: "", capturedCells: [] },
     green: { name: "", capturedCells: [] },
   },
+  isInitialized: false,
   board: [],
   currentTurn: "orange",
   phase: "picking",
@@ -24,6 +25,7 @@ const gameSlice = createSlice({
     setTeamNames(state, action) {
       state.teams.orange.name = action.payload.orangeTeamName;
       state.teams.green.name = action.payload.greenTeamName;
+      state.isInitialized = true;
     },
     setBoard(state, action) {
       state.board = action.payload;

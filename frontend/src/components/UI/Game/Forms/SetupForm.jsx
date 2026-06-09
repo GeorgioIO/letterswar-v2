@@ -2,15 +2,27 @@ import ModePicker from "./ModePicker";
 
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { useActionState, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { gameActions } from "../../../../store/slices/gameSlice";
 
 export default function SetupForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [formAction] = useActionState(setupAction, { errors: null });
   const [gameMode, setGameMode] = useState("text");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    let orangeTeamName = formData.get("orangeTeamName") || "Orange Team";
+    let greenTeamName = formData.get("greenTeamName") || "Green Team";
+
+    dispatch(gameActions.setTeamNames({ orangeTeamName, greenTeamName }));
+    dispatch(gameActions.setAnswerMode(gameMode));
+    navigate("/game/play");
+  }
 
   function toggleMode(mode) {
     setGameMode(mode);
@@ -20,29 +32,12 @@ export default function SetupForm() {
     navigate("/game");
   }
 
-  function setupAction(prevState, formData) {
-    let orangeTeamName = formData.get("orangeTeamName");
-    let greenTeamName = formData.get("greenTeamName");
-
-    if (!orangeTeamName) {
-      orangeTeamName = "Orange Team";
-    }
-
-    if (!greenTeamName) {
-      greenTeamName = "Green Team";
-    }
-
-    dispatch(gameActions.setTeamNames({ orangeTeamName, greenTeamName }));
-    dispatch(gameActions.setAnswerMode(gameMode));
-    navigate("/game/play");
-  }
-
   return (
     <motion.form
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      action={formAction}
+      onSubmit={handleSubmit}
       className="w-full max-w-[95%] md:max-w-2xl mx-auto p-4 md:p-8 bg-white rounded-4xl shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 "
     >
       {/* Left Side - Orange Team */}

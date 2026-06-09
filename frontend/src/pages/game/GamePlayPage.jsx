@@ -15,13 +15,8 @@ export default function GamePlayPage() {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
 
-  const { board, teams, currentTurn, phase, usedQuestionIds } = useSelector(
-    (state) => state.game,
-  );
-
-  if (teams.orange.name === "" && teams.green.name === "") {
-    return <Navigate to="/game/setup" />;
-  }
+  const { board, teams, currentTurn, phase, usedQuestionIds, isInitialized } =
+    useSelector((state) => state.game);
 
   useEffect(() => {
     return () => {
@@ -70,6 +65,10 @@ export default function GamePlayPage() {
 
   if (board.length === 0) {
     return <Loading />;
+  }
+
+  if (!isInitialized) {
+    return <Navigate to="/game/setup" />;
   }
 
   return (

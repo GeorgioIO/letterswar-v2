@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { GridLoader } from "react-spinners";
 
 export default function ProtectedRoute() {
-  const { isLoggedIn, isLoading, admin } = useAuth();
+  const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
     return (

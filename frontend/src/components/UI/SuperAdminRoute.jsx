@@ -1,5 +1,5 @@
 import { useAuth } from "../../hooks/useAuth";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { GridLoader } from "react-spinners";
 import { ShieldOff } from "lucide-react";
 
