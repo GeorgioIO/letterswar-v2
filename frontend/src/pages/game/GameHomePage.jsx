@@ -5,6 +5,7 @@ import LetterStrip from "../../components/UI/Game/LetterStrip";
 import { NavLink } from "react-router-dom";
 import { useModal } from "../../hooks/useModal";
 import InstructionsModal from "../../components/UI/Modals/InstructionsModal";
+import { motion } from "framer-motion";
 
 const CARDS = [
   ["26", "Letters"],
@@ -26,7 +27,12 @@ export default function GameHomePage() {
 
       <LetterStrip />
 
-      <div className="flex-1 flex flex-col items-center justify-center text-center px-5 md:px-10 gap-5 md:gap-7 py-10">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="flex-1 flex flex-col items-center justify-center text-center px-5 md:px-10 gap-5 md:gap-7 py-10"
+      >
         <span className="inline-flex items-center gap-1.5 bg-orange-100 border border-orange-200 text-orange-700 text-xs font-medium px-4 py-1.5 rounded-full">
           <Zap size={12} /> Board trivia game
         </span>
@@ -75,7 +81,7 @@ export default function GameHomePage() {
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       <Footer />
     </section>

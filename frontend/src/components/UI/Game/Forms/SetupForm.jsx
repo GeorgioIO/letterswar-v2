@@ -1,5 +1,6 @@
 import ModePicker from "./ModePicker";
 
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { useActionState, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +9,7 @@ import { gameActions } from "../../../../store/slices/gameSlice";
 export default function SetupForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [formState, formAction] = useActionState(setupAction, { errors: null });
+  const [formAction] = useActionState(setupAction, { errors: null });
   const [gameMode, setGameMode] = useState("text");
 
   function toggleMode(mode) {
@@ -37,7 +38,10 @@ export default function SetupForm() {
   }
 
   return (
-    <form
+    <motion.form
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
       action={formAction}
       className="w-full max-w-[95%] md:max-w-2xl mx-auto p-4 md:p-8 bg-white rounded-4xl shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 "
     >
@@ -79,7 +83,7 @@ export default function SetupForm() {
           </button>
         </div>
       </div>
-    </form>
+    </motion.form>
   );
 }
 

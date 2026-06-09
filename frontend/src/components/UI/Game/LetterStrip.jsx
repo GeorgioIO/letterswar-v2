@@ -1,9 +1,15 @@
+import { motion } from "framer-motion";
+
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export default function LetterStrip() {
   return (
     <div className="relative h-12 md:h-14 overflow-hidden border-y border-orange-200">
-      <div className="flex animate-scroll whitespace-nowrap w-max">
+      <motion.div
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="flex  whitespace-nowrap w-max"
+      >
         {[...LETTERS, ...LETTERS].map((l, i) => (
           <span
             key={i}
@@ -13,7 +19,7 @@ export default function LetterStrip() {
             {l}
           </span>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
