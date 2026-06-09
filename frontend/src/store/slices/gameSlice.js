@@ -58,7 +58,7 @@ const gameSlice = createSlice({
     switchTurn(state) {
       state.currentTurn = state.currentTurn === "orange" ? "green" : "orange";
     },
-    resetGame(state) {
+    resetGame() {
       return { ...initialGameSliceState, board: [], usedQuestionIds: [] };
     },
     toggleIsAnswerRevealed(state, action) {
