@@ -6,12 +6,15 @@ import FilterLetterModal from "../../components/UI/Modals/FilterLetterModal";
 import AddQuestionModal from "../../components/UI/Modals/AddQuestionModal";
 import DeleteModal from "../../components/UI/Modals/DeleteModal";
 import Error from "../../components/UI/Error";
+import RestoreModal from "../../components/UI/Modals/RestoreModal";
+import QuestionImportModal from "../../components/UI/Modals/QuestionImportModal";
 
 // Hooks
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { useModal } from "../../hooks/useModal";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { useToast } from "../../hooks/useToast";
 import { queryClient } from "../../util/tanstack";
 
 // Requests functions
@@ -23,9 +26,6 @@ import {
   updateQuestionRequest,
   importQuestionsRequest,
 } from "../../api/questions.api";
-import RestoreModal from "../../components/UI/Modals/RestoreModal";
-import QuestionImportModal from "../../components/UI/Modals/QuestionImportModal";
-import { useToast } from "../../hooks/useToast";
 
 const tableColumns = ["Letter", "Question", "Answer", "Created By", "Action"];
 
@@ -33,7 +33,7 @@ export default function QuestionPage() {
   const [letterSelected, setLetterSelected] = useState(null);
   const [showDeleted, setShowDeleted] = useState(false);
 
-  const { page, limit, setPage, setTotalPages, handleLimitChange, resetPage } =
+  const { page, limit, setPage, handleLimitChange, resetPage } =
     usePagination();
   const { showToast } = useToast();
 
