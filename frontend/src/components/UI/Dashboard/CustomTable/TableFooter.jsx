@@ -1,6 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import NavigationButton from "../../Pagination/NavigationButton";
-import { useEffect, useState } from "react";
 
 export default function TableFooter({
   isPlaceholderData,
@@ -8,15 +7,7 @@ export default function TableFooter({
   totalPages,
   onPageChange,
 }) {
-  const [currentPage, setCurrentPage] = useState(page);
-
-  useEffect(() => {
-    setCurrentPage(page);
-  }, [page]);
-
   function handleInputChange(e) {
-    setCurrentPage(e.target.value);
-
     const val = parseInt(e.target.value);
 
     if (isNaN(val)) return;
@@ -56,7 +47,7 @@ export default function TableFooter({
           min={1}
           max={totalPages}
           step={1}
-          value={currentPage}
+          value={page}
           onChange={handleInputChange}
           className="w-10 h-8.5 text-center text-sm text-gray-700 font-medium border border-gray-200 rounded-lg outline-none focus:border-orange-400 transition-colors"
         />

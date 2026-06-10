@@ -121,12 +121,6 @@ export default function QuestionPage() {
       },
     });
 
-  useEffect(() => {
-    if (data?.totalPages) {
-      setTotalPages(data.totalPages);
-    }
-  }, [data?.totalPages, setTotalPages]);
-
   // Modals
   const filterModal = useModal();
   const deleteModal = useModal();
@@ -184,7 +178,7 @@ export default function QuestionPage() {
         isPlaceholderData={isPlaceholderData}
         columns={tableColumns}
         showDeleted={showDeleted}
-        page={data?.page}
+        page={page}
         totalPages={data?.totalPages}
         onPageChange={setPage}
         noDataTitle="No Questions Available"
