@@ -6,6 +6,7 @@ import Feedback from "./Feedback";
 import RevealAnswerButton from "./RevealAnswerButton";
 import VoiceCaptureButtons from "./VoiceCaptureButtons.jsx";
 import { useQuestionOverlay } from "../../../hooks/useQuestionOverlay.js";
+import { motion } from "framer-motion";
 
 export default function QuestionOverlay() {
   const {
@@ -36,7 +37,12 @@ export default function QuestionOverlay() {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl p-6 flex flex-col items-center gap-5">
+      <motion.div
+        initial={{ scale: 0.7 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring" }}
+        className="w-full max-w-md bg-white rounded-3xl p-6 flex flex-col items-center gap-5"
+      >
         {/* Phase label */}
         <PhaseLabel
           isStealing={isStealing}
@@ -105,7 +111,7 @@ export default function QuestionOverlay() {
             )}
           </>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

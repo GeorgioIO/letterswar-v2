@@ -1,8 +1,12 @@
 import Cell from "./Cell";
+import { motion } from "framer-motion";
 
 export default function Board({ board, onCellClick, currentTurn }) {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, x: -20, scale: 0.9 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      transition={{ type: "spring", duration: 0.5 }}
       className="
       p-2.5
       grid grid-cols-5 gap-2 w-full max-w-sm mx-auto 
@@ -19,6 +23,6 @@ export default function Board({ board, onCellClick, currentTurn }) {
           currentTurn={currentTurn}
         />
       ))}
-    </div>
+    </motion.div>
   );
 }

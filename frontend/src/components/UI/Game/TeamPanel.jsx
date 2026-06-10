@@ -1,6 +1,11 @@
+import { motion } from "framer-motion";
+
 export default function TeamPanel({ team, name, isActive }) {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: -30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
       className={`
       flex flex-col items-center gap-1 p-3 rounded-2xl transition-all
       ${
@@ -15,6 +20,6 @@ export default function TeamPanel({ team, name, isActive }) {
         {team}
       </p>
       <p className="text-base font-black">{name || `${team} team`}</p>
-    </div>
+    </motion.div>
   );
 }
