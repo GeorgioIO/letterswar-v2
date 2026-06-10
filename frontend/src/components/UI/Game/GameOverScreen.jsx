@@ -7,6 +7,7 @@ import ResultBadge from "./ResultBadge";
 import Scores from "./Scores";
 import { useState } from "react";
 import Error from "../Error";
+import { motion } from "framer-motion";
 
 export default function GameOverScreen() {
   const dispatch = useDispatch();
@@ -51,7 +52,12 @@ export default function GameOverScreen() {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl p-6 flex flex-col items-center gap-5">
+      <motion.div
+        initial={{ scale: 0.7 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring" }}
+        className="w-full max-w-md bg-white rounded-3xl p-6 flex flex-col items-center gap-5"
+      >
         {/* Result Badge */}
         <ResultBadge isTie={isTie} winner={winner} />
 
@@ -102,7 +108,7 @@ export default function GameOverScreen() {
             Go Home
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
